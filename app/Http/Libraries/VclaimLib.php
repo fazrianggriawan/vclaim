@@ -6,11 +6,30 @@ use LZCompressor\LZString;
 
 // use \LZCompressor\LZString;
 
+/*
+	Bersama ini kami sampaikan akses integrasi aplikasi VClaim Production melalui web service 2.0 dengan aplikasi SIM FKRTL dengan informasi sebagai berikut:
+
+KodePPK - Nama PPK : 2501R006 - RS Tk II Prof dr J.A LATUMETEN
+Consid - Secretkey : 31907 - 1mR60EB812
+
+[PRODUCTION]
+2501R006 RS Tk II Prof dr J.A LATUMETEN
+user_key: f7b2fe33396725df35fdb770addabd11
+	*/
+
+// SALAK
+// const URL = 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
+// const CONS_ID = '24903';
+// const SECRETKEY = '2kT3ADA426';
+// const PPK = '1003R002';
+// const USERKEY = '160373608a1a918cefd6fbc41bac4fd2';
+
+// AMBON
 const URL = 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
-const CONS_ID = '24903';
-const SECRETKEY = '2kT3ADA426';
-const PPK = '1003R002';
-const USERKEY = '160373608a1a918cefd6fbc41bac4fd2';
+const CONS_ID = '31907';
+const SECRETKEY = '1mR60EB812';
+const PPK = '2501R006';
+const USERKEY = 'f7b2fe33396725df35fdb770addabd11';
 
 class VclaimLib
 {

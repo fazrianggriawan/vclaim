@@ -8,9 +8,9 @@ use Illuminate\Http\Client\Request;
 
 class Referensi extends Controller
 {
-    public function Diagnosa(Request $request)
+    public function Diagnosa($keyword)
 	{
-		$url = 'referensi/diagnosa/'.$request->input('key');
+		$url = 'referensi/diagnosa/'.$keyword;
         return VclaimLib::exec('GET', $url);
 	}
 
@@ -79,15 +79,11 @@ class Referensi extends Controller
 		return VclaimLib::exec('GET', 'referensi/diagnosaprb');
 	}
 
-	public function DokterDpjp(Request $request)
+	public function DokterDpjp($jnsPelayanan, $poliklinik)
 	{
 		$tgl_pelayanan = Date('Y-m-d');
-        $jnsPelayanan = $request->input('jns_pelayanan');
-        $idSpesialis = $request->input('id_spesialis');
 
-		if( $idSpesialis == 'IGD' ) $jnsPelayanan = 1;
-
-		$url = 'referensi/dokter/pelayanan/'.$jnsPelayanan.'/tglPelayanan/'.$tgl_pelayanan.'/Spesialis/'.$idSpesialis;
+		$url = 'referensi/dokter/pelayanan/'.$jnsPelayanan.'/tglPelayanan/'.$tgl_pelayanan.'/Spesialis/'.$poliklinik;
 
 		return VclaimLib::exec('GET', $url);
 	}
