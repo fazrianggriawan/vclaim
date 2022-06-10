@@ -19,6 +19,7 @@ class Rujukan extends Controller
         if( $data ){
             $data = json_decode($data);
             if( $data->metaData->code == '200' ){
+                $data->response->rujukan->provPerujuk->nama = 'RS Tk II Prof dr J.A LATUMETEN';
                 $this->doPrint($data->response);
             }else{
                 return $this->metaData->message;
