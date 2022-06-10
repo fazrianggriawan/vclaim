@@ -32,6 +32,13 @@ class Rujukan extends Controller
     {
         $data = json_decode(base64_decode($data));
         if( $data ){
+            $data->rujukan->tglKunjungan = $data->rujukan->tglRujukan;
+            $data->rujukan->noKunjungan = $data->rujukan->noRujukan;
+            $data->rujukan->poliRujukan = $data->rujukan->poliTujuan;
+            $data->rujukan->provPerujuk = $data->rujukan->AsalRujukan;
+            $data->rujukan->peserta->sex = $data->rujukan->peserta->kelamin;
+            // print_r($data);
+            // exit;
             $this->doPrint($data);
         }else{
             return 'Terjadi Gangguan Pada Server BPJS.';
@@ -76,7 +83,7 @@ class Rujukan extends Controller
 		$pdf->Cell($widthCellData-40, $heightCell, '', $border);
 		$pdf->Ln(8);
 		$pdf->Cell($widthCellData+28, $heightCell, 'Mohon Pemeriksaan dan Penanganan Lebih Lanjut :', $border);
-		$pdf->Cell($widthCellData-40, $heightCell, strtoupper($data->rujukan->pelayanan->nama), $border);
+		$pdf->Cell($widthCellData-40, $heightCell, strtoupper(@$data->rujukan->pelayanan->nama), $border);
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'No. Kartu', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$data->rujukan->peserta->noKartu, $border);
@@ -91,7 +98,7 @@ class Rujukan extends Controller
 		$pdf->Cell($widthCellData, $heightCell,': '.$data->rujukan->diagnosa->kode.' '.$data->rujukan->diagnosa->nama, $border);
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Keterangan', $border);
-		$pdf->Cell($widthCellData, $heightCell,': '.$data->rujukan->keluhan, $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.@$data->rujukan->keluhan, $border);
 		$pdf->Ln(10);
 		$pdf->Cell($widthCell+90, $heightCell,'Demikian atas bantuannya,diucapkan banyak terima kasih.', $border);
 		$pdf->Ln(10);
