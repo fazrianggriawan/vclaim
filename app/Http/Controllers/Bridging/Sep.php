@@ -15,43 +15,43 @@ class Sep extends Controller
         $request = json_decode(file_get_contents("php://input"));
 
         $data['request']['t_sep'] =
-            array (
-                'noKartu' 	   => $request->noKartu,
-                'tglSep' 	   => $request->tglSep,
+            array(
+                'noKartu'        => $request->noKartu,
+                'tglSep'        => $request->tglSep,
                 'ppkPelayanan' => VclaimLib::getPPK(),
                 'jnsPelayanan' => $request->jnsPelayanan,
-                'klsRawat' 	   => array(
+                'klsRawat'        => array(
                     "klsRawatHak"     => $request->hakKelas->kode,
                     "klsRawatNaik"    => $request->naikKelas,
                     "pembiayaan"      => $request->naikKelasPembiayaan,
                     "penanggungJawab" => $request->naikKelasPenanggungJawab
                 ),
-                'noMR' 		=> $request->norm,
-                'rujukan' 	=> array (
+                'noMR'         => $request->norm,
+                'rujukan'     => array(
                     'asalRujukan' => (isset($request->rujukan->asalFaskes)) ? $request->rujukan->asalFaskes : '1', // 1 = RS, 2 = Puskesmas
                     'tglRujukan'  => (isset($request->rujukan->rujukan->tglKunjungan)) ? $request->rujukan->rujukan->tglKunjungan : '',
                     'noRujukan'   => (isset($request->rujukan->rujukan->noKunjungan)) ? $request->rujukan->rujukan->noKunjungan : '',
                     'ppkRujukan'  => (isset($request->rujukan->rujukan->provPerujuk)) ? $request->rujukan->rujukan->provPerujuk->kode : VclaimLib::getPPK()
                 ),
-                'catatan' 		 => $request->catatan,
-                'diagAwal' 		 => $request->diagnosa->kode,
-                'poli' 			 => array (
+                'catatan'          => $request->catatan,
+                'diagAwal'          => $request->diagnosa->kode,
+                'poli'              => array(
                     'tujuan'    => $request->poliklinik->kode,
                     'eksekutif' => $request->poliklinikEks,
                 ),
-                'cob' 			 => array (
+                'cob'              => array(
                     'cob' => $request->cob,
                 ),
-                'katarak' 		 => array (
+                'katarak'          => array(
                     'katarak' => $request->katarak,
                 ),
-                'jaminan' 		 => array (
+                'jaminan'          => array(
                     'lakaLantas'  => $request->isLakaLantas,
                     'noLP'  => $request->lakaNoLp,
                     'penjamin'    => array(
                         'tglKejadian' => $request->lakaTglKejadian,
                         'keterangan'  => $request->lakaKeterangan,
-                        'suplesi' 	  => array(
+                        'suplesi'       => array(
                             'suplesi' => $request->lakaSuplesi,
                             'noSepSuplesi' => $request->lakaNoSuplesi,
                             'lokasiLaka' => array(
@@ -66,36 +66,35 @@ class Sep extends Controller
                 'flagProcedure' => $request->flagProcedure,
                 'kdPenunjang'   => $request->kdPenunjang,
                 'assesmentPel'  => $request->assessmentPel,
-                'skdp' 			=> array(
+                'skdp'             => array(
                     'noSurat'  => (isset($request->skdp->noSuratKontrol)) ? $request->skdp->noSuratKontrol : '',
                     'kodeDPJP' => (isset($request->skdp->kodeDokter)) ? $request->skdp->kodeDokter : ''
                 ),
-                'dpjpLayan' 	=> $request->dokter->kode,
-                'noTelp' 		=> $request->tlp,
-                'user' 			=> 'Vclaim',
+                'dpjpLayan'     => $request->dokter->kode,
+                'noTelp'         => $request->tlp,
+                'user'             => 'Vclaim',
             );
 
         // return json_encode($data);
 
         return VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
-
     }
 
     public function GetByNomorSep($nomorSep)
-	{
-        return VclaimLib::exec('GET', 'SEP/'.$nomorSep);
-	}
+    {
+        return VclaimLib::exec('GET', 'SEP/' . $nomorSep);
+    }
 
     public function SepInternal($nomorSep)
     {
-        return VclaimLib::exec('GET', 'SEP/Internal/'.$nomorSep);
+        return VclaimLib::exec('GET', 'SEP/Internal/' . $nomorSep);
     }
 
     public function Delete()
     {
         $request = json_decode(file_get_contents("php://input"));
 
-		$data['request']['t_sep'] = array ( 'noSep' => $request->noSep, 'user' => 'Vclaim' );
+        $data['request']['t_sep'] = array('noSep' => $request->noSep, 'user' => 'Vclaim');
 
         return VclaimLib::exec('DELETE', 'SEP/2.0/delete', json_encode($data));
     }
@@ -104,14 +103,31 @@ class Sep extends Controller
     {
         $request = json_decode(file_get_contents("php://input"));
 
-		$data['request']['t_sep'] = array (
-                    'noSep' => $request->nosep,
-                    'noSurat' => $request->nosurat,
-                    'tglRujukanInternal' => $request->tglrujukinternal,
-                    'kdPoliTuj' => $request->kdpolituj,
-                    'user' => 'Vclaim'
-                );
+        $data['request']['t_sep'] = array(
+            'noSep' => $request->nosep,
+            'noSurat' => $request->nosurat,
+            'tglRujukanInternal' => $request->tglrujukinternal,
+            'kdPoliTuj' => $request->kdpolituj,
+            'user' => 'Vclaim'
+        );
 
         return VclaimLib::exec('DELETE', 'SEP/Internal/delete', json_encode($data));
+    }
+
+    public function UpdatePasienPulang()
+    {
+        $request = json_decode(file_get_contents("php://input"));
+
+        $data["request"]["t_sep"] = array(
+            "noSep" =>  $request->noSep,
+            "statusPulang" => $request->statusPulang,
+            "noSuratMeninggal" => $request->noSuratMeninggal,
+            "tglMeninggal" => $request->tglMeninggal,
+            "tglPulang" => $request->tanggal,
+            "noLPManual" => $request->noLp,
+            "user" => 'VClaim'
+        );
+
+        return VclaimLib::exec('PUT', 'SEP/2.0/updtglplg', json_encode($data));
     }
 }

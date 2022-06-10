@@ -20,6 +20,7 @@ $router->get('sep/nomorSep/{nomorSep}', 'Bridging\Sep@GetByNomorSep' );
 $router->post('sep/save', 'Bridging\Sep@Save' );
 $router->post('sep/delete', 'Bridging\Sep@Delete' );
 $router->post('sep/deleteSepInternal', 'Bridging\Sep@DeleteSepInternal' );
+$router->post('sep/updatePasienPulang', 'Bridging\Sep@UpdatePasienPulang' );
 
 /* History */
 $router->get('history/nomorKartu/{nomorKartu}/from/{from}/to/{to}', 'Bridging\Monitoring@GetHistorySep' );
