@@ -30,13 +30,12 @@ class Rujukan extends Controller
 
     public function RujukanKeluar($data)
     {
-        return $data;
-        // $data = json_decode(base64_decode($data));
-        // if( $data ){
-        //     $this->doPrint($data);
-        // }else{
-        //     return 'Terjadi Gangguan Pada Server BPJS.';
-        // }
+        $data = json_decode(base64_decode($data));
+        if( $data ){
+            $this->doPrint($data);
+        }else{
+            return 'Terjadi Gangguan Pada Server BPJS.';
+        }
     }
 
     public function doPrint($data)
