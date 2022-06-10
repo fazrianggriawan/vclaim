@@ -46,10 +46,10 @@ class Sep extends Controller
 		// $pdf->Cell($widthCell-5);
 		$pdf->Cell(70, 5,'SURAT ELEGIBILITAS PASIEN', $border);
 		$pdf->Ln(5);
+        $pdf->Cell($widthCellData, 5,'RS Tk II Prof dr J.A LATUMETEN', $border);
 		$pdf->Cell($widthCell);
 		$pdf->Cell(70, 5,'', $border);
 
-		$pdf->SetLeftMargin(5);
 		$pdf->SetFont('arial', $fontWeight, 10);
 		$pdf->Ln(10);
 		$pdf->Cell($widthCell, $heightCell,'No.SEP', $border);

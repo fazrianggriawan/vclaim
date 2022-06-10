@@ -19,9 +19,9 @@ class Referensi extends Controller
         return VclaimLib::exec('GET', 'referensi/poli/'.$keyword);
 	}
 
-    public function Faskes(Request $request)
+    public function Faskes($keyword)
 	{
-		$url = 'referensi/faskes/'.$request->input('key').'/2';
+		$url = 'referensi/faskes/'.$keyword.'/2';
         return VclaimLib::exec('GET', $url);
 	}
 

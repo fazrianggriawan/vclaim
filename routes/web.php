@@ -21,8 +21,6 @@ $router->post('sep/save', 'Bridging\Sep@Save' );
 $router->post('sep/delete', 'Bridging\Sep@Delete' );
 $router->post('sep/deleteSepInternal', 'Bridging\Sep@DeleteSepInternal' );
 
-$router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
-
 /* History */
 $router->get('history/nomorKartu/{nomorKartu}/from/{from}/to/{to}', 'Bridging\Monitoring@GetHistorySep' );
 
@@ -34,6 +32,8 @@ $router->get('peserta/nik/{nik}', 'Bridging\Peserta@GetByNik' );
 $router->get('rujukan/nomorRujukan/{nomorRujukan}', 'Bridging\Rujukan@GetByNomorRujukan' );
 $router->get('rujukan/faskes/nomorKartu/{nomorKartu}', 'Bridging\Rujukan@GetRujukanFaskes' );
 $router->get('rujukan/rs/nomorKartu/{nomorKartu}', 'Bridging\Rujukan@GetRujukanRs' );
+$router->get('rujukan/keluarRs/{nomorRujukan}', 'Bridging\Rujukan@GetRujukanKeluar' );
+$router->post('rujukan/save/rujukanKeluar', 'Bridging\Rujukan@SaveRujukanKeluar' );
 
 /* Surat Kontrol */
 $router->get('suratKontrol/get/{noSuratKontrol}', 'Bridging\SuratKontrol@GetSuratKontrol' );
@@ -49,3 +49,9 @@ $router->get('prb/data/from/{from}/to/{to}', 'Bridging\Prb@DataPrb' );
 $router->get('referensi/diagnosa/{keyword}', 'Bridging\Referensi@Diagnosa' );
 $router->get('referensi/poliklinik/{keyword}', 'Bridging\Referensi@Poliklinik' );
 $router->get('referensi/dokter/jnsPerawatan/{jnsPelayanan}/poliklinik/{poliklinik}', 'Bridging\Referensi@DokterDpjp' );
+$router->get('referensi/faskes/{keyword}', 'Bridging\Referensi@Faskes' );
+
+// Print
+$router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
+$router->get('rujukan/print/{nomorRujukan}', 'Bridging\Cetak\Rujukan@Index' );
+$router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKeluar' );
