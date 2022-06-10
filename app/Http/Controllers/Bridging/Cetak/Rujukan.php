@@ -35,7 +35,8 @@ class Rujukan extends Controller
             $data->rujukan->tglKunjungan = $data->rujukan->tglRujukan;
             $data->rujukan->noKunjungan = $data->rujukan->noRujukan;
             $data->rujukan->poliRujukan = $data->rujukan->poliTujuan;
-            $data->rujukan->provPerujuk = $data->rujukan->AsalRujukan;
+            $data->rujukan->provPerujuk = $data->rujukan->tujuanRujukan;
+            $data->rujukan->diagnosa->kode = '';
             $data->rujukan->peserta->sex = $data->rujukan->peserta->kelamin;
             // print_r($data);
             // exit;
