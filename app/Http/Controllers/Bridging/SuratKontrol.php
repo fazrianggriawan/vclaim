@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bridging;
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\VclaimLib;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\DB;
 
 class SuratKontrol extends Controller
 {
@@ -15,9 +16,9 @@ class SuratKontrol extends Controller
         return VclaimLib::exec('GET', $url);
     }
 
-    public function BySep(Request $request)
+    public function BySep($noSep)
     {
-        $url = 'RencanaKontrol/nosep/' . $request->input('key');
+        $url = 'RencanaKontrol/nosep/' . $noSep;
         return VclaimLib::exec('GET', $url);
     }
 
@@ -61,7 +62,22 @@ class SuratKontrol extends Controller
             "user" => 'Vclaim'
         );
 
-        return VclaimLib::exec('POST', 'RencanaKontrol/insert', json_encode($data));
+        $response = VclaimLib::exec('POST', 'RencanaKontrol/insert', json_encode($data));
+
+        $dataResponse = json_decode($response);
+
+        $noSuratKontrol = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->noSuratKontrol : '';
+
+        $insert = array(
+            'noSuratKontrol' => $noSuratKontrol,
+            'request' => json_encode($data),
+            'response' => $response,
+            'response_code' => $dataResponse->metaData->code,
+        );
+
+        DB::table('vclaim_surat_kontrol')->insert($insert);
+
+        return $response;
     }
 
     public function SaveSpri()

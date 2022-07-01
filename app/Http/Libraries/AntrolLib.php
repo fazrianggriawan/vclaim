@@ -4,21 +4,15 @@ namespace App\Http\Libraries;
 
 use LZCompressor\LZString;
 
-// SALAK
-const URL 		= 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
+// SALAK Production
+const URL 		= 'https://apijkn.bpjs-kesehatan.go.id/antreanrs';
 const CONS_ID 	= '24903';
 const SECRETKEY = '2kT3ADA426';
 const PPK 		= '1003R002';
-const USERKEY 	= '160373608a1a918cefd6fbc41bac4fd2';
+const USERKEY 	= 'a46d5256f36c5d9a616f1afecfb2aefe';
 
-// AMBON
-// const URL = 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
-// const CONS_ID = '31907';
-// const SECRETKEY = '1mR60EB812';
-// const PPK = '2501R006';
-// const USERKEY = 'f7b2fe33396725df35fdb770addabd11';
 
-class VclaimLib
+class AntrolLib
 {
     /**
      * Create a new controller instance.

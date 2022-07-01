@@ -34,14 +34,15 @@ $router->get('rujukan/nomorRujukan/{nomorRujukan}', 'Bridging\Rujukan@GetByNomor
 $router->get('rujukan/faskes/nomorKartu/{nomorKartu}', 'Bridging\Rujukan@GetRujukanFaskes' );
 $router->get('rujukan/rs/nomorKartu/{nomorKartu}', 'Bridging\Rujukan@GetRujukanRs' );
 $router->get('rujukan/keluarRs/{nomorRujukan}', 'Bridging\Rujukan@GetRujukanKeluar' );
+$router->get('rujukan/jumlahSep/nomorRujukan/{nomorRujukan}/jnsPelayanan/{jnsPelayanan}', 'Bridging\Rujukan@GetJumlahSep' );
 $router->post('rujukan/save/rujukanKeluar', 'Bridging\Rujukan@SaveRujukanKeluar' );
 
 /* Surat Kontrol */
 $router->get('suratKontrol/get/{noSuratKontrol}', 'Bridging\SuratKontrol@GetSuratKontrol' );
 $router->get('suratKontrol/byPeserta/nomorKartu/{nomorKartu}/bulan/{bulan}/filter/{filter}', 'Bridging\SuratKontrol@ListSuratKontrolByPeserta' );
 $router->get('suratKontrol/delete/noSuratKontrol/{noSuratKontrol}', 'Bridging\SuratKontrol@Delete' );
+$router->get('suratKontrol/bySep/{noSep}', 'Bridging\SuratKontrol@BySep' );
 $router->post('suratKontrol/save', 'Bridging\SuratKontrol@SaveRencanaKontrol' );
-
 
 /* PRB */
 $router->get('prb/data/from/{from}/to/{to}', 'Bridging\Prb@DataPrb' );
@@ -51,8 +52,15 @@ $router->get('referensi/diagnosa/{keyword}', 'Bridging\Referensi@Diagnosa' );
 $router->get('referensi/poliklinik/{keyword}', 'Bridging\Referensi@Poliklinik' );
 $router->get('referensi/dokter/jnsPerawatan/{jnsPelayanan}/poliklinik/{poliklinik}', 'Bridging\Referensi@DokterDpjp' );
 $router->get('referensi/faskes/{keyword}', 'Bridging\Referensi@Faskes' );
+$router->get('referensi/jadwalDokter/poli/{kodePoli}/tanggal/{tglKunjungan}', 'Bridging\Referensi@JadwalDokter' );
 
-// Print
+/* Print */
 $router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
 $router->get('rujukan/print/{nomorRujukan}', 'Bridging\Cetak\Rujukan@Index' );
 $router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKeluar' );
+
+/* Master */
+$router->get('master/poliklinik', 'Master@Poliklinik' );
+
+/* Antrian Online */
+$router->post('antrian/save', 'Bridging\AntrianOnline@Save' );

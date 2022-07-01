@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Libraries\AppLib;
 use App\Http\Libraries\VclaimLib;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\DB;
 
 class Sep extends Controller
 {
@@ -75,9 +76,25 @@ class Sep extends Controller
                 'user'             => 'Vclaim',
             );
 
-        // return json_encode($data);
+        $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
 
-        return VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
+        $dataResponse = json_decode($response);
+
+        $noSep = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->sep->noSep : '';
+
+        $insert = array(
+            'noSep' => $noSep,
+            'noTlp' => $request->tlp,
+            'norm' => $request->norm,
+            'tujuanKunj' => $request->tujuanKunj,
+            'request' => json_encode($data),
+            'response' => $response,
+            'response_code' => $dataResponse->metaData->code,
+        );
+
+        DB::table('vclaim_sep')->insert($insert);
+
+        return $response;
     }
 
     public function GetByNomorSep($nomorSep)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Bridging;
 
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\VclaimLib;
+use App\Http\Libraries\AntrolLib;
 use Illuminate\Http\Client\Request;
 
 class Referensi extends Controller
@@ -92,6 +93,12 @@ class Referensi extends Controller
 	{
 		$url = 'referensi/obatprb/'.$request->input('key');
 		return VclaimLib::exec('GET', $url);
+	}
+
+	public function JadwalDokter($kodePoli, $tglKunjungan)
+	{
+		$url = 'jadwaldokter/kodepoli/'.$kodePoli.'/tanggal/'.$tglKunjungan;
+		return AntrolLib::exec('GET', $url);
 	}
 
 }

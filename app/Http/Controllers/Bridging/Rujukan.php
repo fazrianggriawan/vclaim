@@ -37,6 +37,11 @@ class Rujukan extends Controller
         return VclaimLib::exec('GET', 'Rujukan/Keluar/'.$nomorRujukan);
 	}
 
+    public function GetJumlahSep($nomorRujukan, $jnsPelayanan)
+    {
+        return VclaimLib::exec('GET', 'Rujukan/JumlahSEP/'.$jnsPelayanan.'/'.$nomorRujukan);
+    }
+
     public function SaveRujukanKeluar()
     {
         $request = json_decode(file_get_contents("php://input"));
@@ -55,7 +60,6 @@ class Rujukan extends Controller
         );
 
         return VclaimLib::exec('POST', 'Rujukan/2.0/insert', json_encode($data));
-
     }
 
 }
