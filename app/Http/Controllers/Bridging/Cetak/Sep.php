@@ -191,6 +191,7 @@ class Sep extends Controller
         $pdf->SetY(0);
 
 		$pdf->SetFont('arial', 'B', 12);
+        $pdf->Ln(5);
 		$pdf->Cell(70, 5,'SURAT ELEGIBILITAS PASIEN', $border);
 		$pdf->Ln(5);
 		$pdf->Cell(70, 5,'RS SALAK', $border);
@@ -292,22 +293,50 @@ class Sep extends Controller
 
         $pdf->AutoPrint();
 
+		$pdf->Output();
+        exit;
+    }
+
+    public function DataBooking($kodeBooking)
+    {
+        //  Bukti Registrasi
+
+        $data = DB::table('antrian')
+			->where('booking_code', $kodeBooking)
+			->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+			->get();
+
+		$jadwalDokter = json_decode($data[0]->jadwalDokter);
+		$pasien = json_decode($data[0]->pasien);
+
+        $pdf = new PDFBarcode();
+
+		$border = 0;
+		$heightCell = 6;
+		$widthCell = 28;
+		$widthCellData = 90;
+
         $pdf->AddPage('P', [80,100]);
 
         $heightCell = 4;
         $widthCell = $widthCell - 10;
-        $pdf->SetMargins(0,0);
+
+        $pdf->SetFont('arial', 'B', 10);
+        $pdf->SetX(2);
+        $pdf->Cell($widthCell, $heightCell,'DATA REGISTRASI ONLINE', $border);
+
+        $pdf->SetMargins(2,0);
 
 		$pdf->SetFont('arial', '', 9);
-		$pdf->Ln(5);
+		$pdf->Ln(8);
 		$pdf->Cell($widthCell, $heightCell,'Tanggal', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->tglKunjungan, $border);
+        $pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'No. RM', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.substr($pasien->norekmed, -6), $border);
 		$pdf->Ln(5);
 		$pdf->Cell($widthCell, $heightCell,'Nama', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->nama, $border);
-		$pdf->Ln(5);
-		$pdf->Cell($widthCell, $heightCell,'No. RM', $border);
-		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->norekmed, $border);
 		$pdf->Ln(5);
 		$pdf->Cell($widthCell, $heightCell,'No. BPJS', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->noaskes, $border);
@@ -322,5 +351,6 @@ class Sep extends Controller
 		$pdf->Output();
         exit;
     }
+
 
 }
