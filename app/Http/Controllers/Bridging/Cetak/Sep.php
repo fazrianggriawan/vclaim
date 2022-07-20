@@ -7,6 +7,7 @@ use App\Http\Controllers\Bridging\Rujukan;
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\PDFBarcode;
 use App\Http\Libraries\VclaimLib;
+use Illuminate\Support\Facades\DB;
 
 class Sep extends Controller
 {
@@ -158,7 +159,7 @@ class Sep extends Controller
                 $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
                 $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
 
-                return $this->PrintSepAnjungan($data->response, $peserta->response->peserta, $rujukan->response->rujukan);
+                return $this->PrintSepAnjungan($data->response, $peserta->response->peserta, $rujukan->response->rujukan, $kodeBooking);
             }else{
                 return $this->metaData->message;
                 exit;
@@ -279,10 +280,43 @@ class Sep extends Controller
 		$pdf->Cell(140, 5,'', $border);
 		$pdf->Cell(45, 5,'_______________________', $border);
 
-		$pdf->AutoPrint();
+		//  Bukti Registrasi
 
-		$pdf2 = $this->BuktiRegistrasi($kodeBooking);
+        $data = DB::table('antrian')
+			->where('booking_code', $kodeBooking)
+			->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+			->get();
 
+		$jadwalDokter = json_decode($data[0]->jadwalDokter);
+		$pasien = json_decode($data[0]->pasien);
+
+        $pdf->AddPage('L', [80,100], 270);
+        $pdf->SetFont('arial', 'B', 12);
+        $pdf->SetAutoPageBreak(TRUE, 0);
+        $heightCell = 4;
+        $pdf->SetMargins(0,0);
+
+		$pdf->SetFont('arial', 'B', 12);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Tanggal', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->tglKunjungan, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Nama', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->nama, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'No. RM', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->norekmed, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'No. BPJS', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->noaskes, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Poliklinik', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->namapoli, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Dokter', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->namadokter, $border);
+
+        $pdf->AutoPrint();
 		$pdf->Output();
         exit;
     }
@@ -297,8 +331,6 @@ class Sep extends Controller
 
 		$jadwalDokter = json_decode($data[0]->jadwalDokter);
 		$pasien = json_decode($data[0]->pasien);
-
-		$pdf = new PDFBarcode();
 
 		$border = 0;
 		$heightCell = 6;
