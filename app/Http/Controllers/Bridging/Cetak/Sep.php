@@ -271,12 +271,11 @@ class Sep extends Controller
 		$pdf->SetFont('arial', '', 9);
 		$pdf->Cell(140, 5,'* SEP Bukan sebagai bukti penjaminan peserta.', $border);
 		$pdf->Ln(6);
-		if( $sep->noSep == '1003R0020622V004509' ){
-		    $pdf->SetX(0);
-		    $pdf->SetFont('arial', 'B', 12);
-		    $pdf->Cell(10, 5,'.', $border);
-		    $pdf->SetFont('arial', $fontWeight, 9);
-		}
+
+        $pdf->SetX(0);
+        $pdf->SetFont('arial', 'B', 12);
+        $pdf->Cell(10, 5,'.', $border);
+        $pdf->SetFont('arial', $fontWeight, 9);
 
 		$pdf->Cell(140, 5,'', $border);
 		$pdf->Cell(45, 5,'_______________________', $border);
@@ -322,10 +321,10 @@ class Sep extends Controller
         $widthCell = $widthCell - 10;
 
         $pdf->SetFont('arial', 'B', 10);
-        $pdf->SetX(2);
+        $pdf->SetX(4);
         $pdf->Cell($widthCell, $heightCell,'DATA REGISTRASI ONLINE', $border);
 
-        $pdf->SetMargins(2,0);
+        $pdf->SetMargins(4,0);
 
 		$pdf->SetFont('arial', '', 9);
 		$pdf->Ln(8);
@@ -346,6 +345,8 @@ class Sep extends Controller
 		$pdf->Ln(5);
 		$pdf->Cell($widthCell, $heightCell,'Dokter', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->namadokter, $border);
+        $pdf->Ln(8);
+        $pdf->Cell($widthCell, $heightCell,'.', $border);
 
         $pdf->AutoPrint();
 		$pdf->Output();
