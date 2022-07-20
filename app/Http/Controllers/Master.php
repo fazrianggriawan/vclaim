@@ -13,7 +13,7 @@ class Master extends Controller
         return AppLib::response(200, $data);
     }
 
-    public function GetPoliklinik($kodePoli)
+    public static function GetPoliklinik($kodePoli)
     {
         $data = DB::table('mst_poli_bpjs')->where('kode', $kodePoli)->get();
         return $data[0];
