@@ -56,7 +56,7 @@ $router->get('referensi/jadwalDokter/poli/{kodePoli}/tanggal/{tglKunjungan}', 'B
 
 /* Print */
 $router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
-$router->get('sep/print/anjungan/{nomorSep}', 'Bridging\Cetak\Sep@Anjungan' );
+$router->get('sep/print/anjungan/{nomorSep}/{kodeBooking}', 'Bridging\Cetak\Sep@Anjungan' );
 $router->get('rujukan/print/{nomorRujukan}', 'Bridging\Cetak\Rujukan@Index' );
 $router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKeluar' );
 

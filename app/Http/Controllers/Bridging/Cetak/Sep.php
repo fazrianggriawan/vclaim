@@ -150,7 +150,7 @@ class Sep extends Controller
 		return $data[$var];
 	}
 
-    public function Anjungan($nomorSep)
+    public function Anjungan($nomorSep, $kodeBooking)
     {
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
         if( $data ){
@@ -170,7 +170,7 @@ class Sep extends Controller
 
     }
 
-    public function PrintSepAnjungan($sep, $peserta, $rujukan)
+    public function PrintSepAnjungan($sep, $peserta, $rujukan, $kodeBooking)
     {
         header("Content-type:application/pdf");
 
@@ -281,9 +281,61 @@ class Sep extends Controller
 
 		$pdf->AutoPrint();
 
+		$pdf2 = $this->BuktiRegistrasi($kodeBooking);
+
 		$pdf->Output();
         exit;
     }
+
+	public function BuktiRegistrasi($kodeBooking)
+	{
+
+		$data = DB::table('antrian')
+			->where('booking_code', $kodeBooking)
+			->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+			->get();
+
+		$jadwalDokter = json_decode($data[0]->jadwalDokter);
+		$pasien = json_decode($data[0]->pasien);
+
+		$pdf = new PDFBarcode();
+
+		$border = 0;
+		$heightCell = 6;
+		$widthCell = 28;
+		$widthCellData = 90;
+		$widthCellData2 = 58;
+		$fontWeight = '';
+
+		$pdf->AddPage('P', [80,190]);
+        $pdf->SetFont('arial', 'B', 12);
+        $pdf->SetAutoPageBreak(TRUE, 0);
+        $heightCell = 4;
+        $pdf->SetY(0);
+
+		$pdf->SetFont('arial', 'B', 12);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Tgl. Kunjungan', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->tglKunjungan, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Nama', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->nama, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'No. RM', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->norekmed, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'No. BPJS', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$pasien->noaskes, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Poliklinik', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->namapoli, $border);
+		$pdf->Ln(5);
+		$pdf->Cell($widthCell, $heightCell,'Dokter', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$jadwalDokter->namadokter, $border);
+
+
+		return $pdf;
+	}
 
 
 }
