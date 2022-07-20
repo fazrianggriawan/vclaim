@@ -14,12 +14,20 @@ class AntrianOnline extends Controller
 	{
         $request = json_decode(file_get_contents("php://input"));
 
+        DB::beginTransaction();
+
         $dataAntrian = $this->SaveAntrian($request);
+
+        $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
+        $this->SaveAntrianDetail($request, $nomorAntrian);
+
+        DB::commit();
+
         if( !$dataAntrian ){
             return AppLib::response(201, array(), 'Data Gagal Disimpan');
         }
 
-        $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
+
         $totalKuota = 80;
 
         $data = array(
@@ -98,6 +106,19 @@ class AntrianOnline extends Controller
         return ( $insert ) ? $dataInsert : FALSE;
     }
 
+    private function SaveAntrianDetail($request, $dataAntrian) {
+        $dataInsert = array(
+            'idAntrian' => $dataAntrian[0]->id,
+            'pasien' => json_encode($request->pasien),
+            'rujukan' => json_encode($request->rujukan),
+            'suratKontrol' => json_encode($request->suratKontrol),
+            'jadwalDokter' => json_encode($request->jadwalDokter),
+            'dateCreated' => date('Y-m-d H:i:s')
+        );
+        $insert = DB::table('antrian_detail')->insert($dataInsert);
+        return ( $insert ) ? $dataInsert : FALSE;
+    }
+
     private function EstimasiWaktuDilayani($jadwal, $noAntrian, $tglKunjungan)
 	{
 		$explodeJadwal = explode('-', $jadwal);
@@ -106,5 +127,15 @@ class AntrianOnline extends Controller
 		$time = $tglKunjungan.' '.$jam_mulai.':00';
 		return strtotime($time.'+'.$addTime.'minutes') * 1000;
 	}
+
+    public function GetAntrian($kodeBooking)
+    {
+        $data = DB::table('antrian')
+                    ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+                    ->where('booking_code', $kodeBooking)
+                    ->get();
+        return AppLib::response(200, $data[0], 'Success');
+    }
+
 
 }

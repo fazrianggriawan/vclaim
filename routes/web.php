@@ -56,6 +56,7 @@ $router->get('referensi/jadwalDokter/poli/{kodePoli}/tanggal/{tglKunjungan}', 'B
 
 /* Print */
 $router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
+$router->get('sep/print/anjungan/{nomorSep}', 'Bridging\Cetak\Sep@Anjungan' );
 $router->get('rujukan/print/{nomorRujukan}', 'Bridging\Cetak\Rujukan@Index' );
 $router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKeluar' );
 
@@ -63,4 +64,9 @@ $router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKelua
 $router->get('master/poliklinik', 'Master@Poliklinik' );
 
 /* Antrian Online */
+$router->get('antrian/kodeBooking/{kodeBooking}', 'Bridging\AntrianOnline@GetAntrian' );
 $router->post('antrian/save', 'Bridging\AntrianOnline@Save' );
+
+
+$router->get('sendEmail', 'MailController@SendMail' );
+$router->get('allowList', 'MailController@AddAllowList' );

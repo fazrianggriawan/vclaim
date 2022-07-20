@@ -38,6 +38,8 @@ $app->withEloquent();
 |
 */
 
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
@@ -61,6 +63,13 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('cors');
+
+// Mail Configure
+$app->configure('mail');
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
+
 
 /*
 |--------------------------------------------------------------------------
