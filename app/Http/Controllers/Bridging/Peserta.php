@@ -8,13 +8,13 @@ use Illuminate\Http\Client\Request;
 
 class Peserta extends Controller
 {
-    public function GetByNomorKartu($nomorKartu)
+    public static function GetByNomorKartu($nomorKartu)
 	{
 		$url = 'Peserta/nokartu/'.$nomorKartu.'/tglSEP/'.date('Y-m-d');
         return VclaimLib::exec('GET', $url);
 	}
 
-    public function GetByNik($nik)
+    public static function GetByNik($nik)
 	{
 		$url = 'Peserta/nik/'.$nik.'/tglSEP/'.date('Y-m-d');
         return VclaimLib::exec('GET', $url);
