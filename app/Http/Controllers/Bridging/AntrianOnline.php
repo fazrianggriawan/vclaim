@@ -137,5 +137,19 @@ class AntrianOnline extends Controller
         return AppLib::response(200, $data[0], 'Success');
     }
 
+    public function FilterData()
+    {
+        $request = json_decode(file_get_contents("php://input"));
+
+        $data = DB::table('antrian')
+                ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+                ->where('poli', $request->poli)
+                ->where('tgl_kunjungan', date('Y-m-d'))
+                ->where('jam_praktek', $request->jadwal)
+                ->get();
+
+        return AppLib::response(200, $data, 'Success');
+    }
+
 
 }

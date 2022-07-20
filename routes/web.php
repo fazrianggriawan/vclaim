@@ -66,6 +66,7 @@ $router->get('master/poliklinik', 'Master@Poliklinik' );
 
 /* Antrian Online */
 $router->get('antrian/kodeBooking/{kodeBooking}', 'Bridging\AntrianOnline@GetAntrian' );
+$router->post('antrian/filterData', 'Bridging\AntrianOnline@FilterData' );
 $router->post('antrian/save', 'Bridging\AntrianOnline@Save' );
 
 
