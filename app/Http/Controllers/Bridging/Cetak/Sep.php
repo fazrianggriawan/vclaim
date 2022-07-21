@@ -156,10 +156,10 @@ class Sep extends Controller
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
         if( $data ){
             if( $data->metaData->code == '200' ){
-                $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
-                $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
+                // $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
+                // $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
 
-                return $this->PrintSepAnjungan($data->response, $peserta->response->peserta, $rujukan->response->rujukan, $kodeBooking);
+                return $this->PrintSepAnjungan($data->response, $kodeBooking);
             }else{
                 return $this->metaData->message;
                 exit;
@@ -171,11 +171,18 @@ class Sep extends Controller
 
     }
 
-    public function PrintSepAnjungan($sep, $peserta, $rujukan, $kodeBooking)
+    public function PrintSepAnjungan($sep, $kodeBooking)
     {
         header("Content-type:application/pdf");
 
 		$pdf = new PDFBarcode();
+
+        $data = DB::table('antrian')
+                ->where('booking_code', $kodeBooking)
+                ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+                ->get();
+
+        $rujukan = json_decode($data[0]->rujukan);
 
 		$border = 0;
 		$heightCell = 6;
@@ -213,45 +220,51 @@ class Sep extends Controller
 		$pdf->Cell($widthCell, $heightCell,'No.Kartu', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$sep->peserta->noKartu.' ( MR. '.$sep->peserta->noMr.' )', $border);
 		$pdf->Cell($widthCell, $heightCell,'Jns.Rawat', $border);
-		$pdf->Cell($widthCellData2, $heightCell,': '.$sep->jnsPelayanan, $border);
+		$pdf->Cell($widthCellData2, $heightCell,': '.strtoupper($sep->jnsPelayanan), $border);
+
+        if( $data[0]->jns_kunjungan == '3' ){
+            $jnsKunjungan = 'Rencana Kontrol';
+        }else{
+            $jnsKunjungan = 'Rujukan Baru';
+        }
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Nama Peserta', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$sep->peserta->nama, $border);
 		$pdf->Cell($widthCell, $heightCell,'Jns.Kunjungan', $border);
-		$pdf->Cell($widthCellData2, $heightCell,': ', $border);
+		$pdf->Cell($widthCellData2, $heightCell,': '.strtoupper($jnsKunjungan), $border);
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Tgl.Lahir', $border);
-		$pdf->Cell($widthCellData, $heightCell,': '.$sep->peserta->tglLahir.' Kelamin : '.$sep->peserta->kelamin, $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$sep->peserta->tglLahir.'      Kelamin : '.$sep->peserta->kelamin, $border);
 		$pdf->Cell($widthCell, $heightCell,'Poli Perujuk', $border);
 		$pdf->Cell($widthCellData2, $heightCell,': ', $border);
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'No.Telepon', $border);
-		$pdf->Cell($widthCellData, $heightCell,': ', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$rujukan->peserta->mr->noTelepon, $border);
 		$pdf->Cell($widthCell, $heightCell,'Kls.Hak', $border);
-		$pdf->Cell($widthCellData2, $heightCell,': '.$sep->peserta->hakKelas, $border);
+		$pdf->Cell($widthCellData2, $heightCell,': '.strtoupper($sep->peserta->hakKelas), $border);
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Sub/Spesialis', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$sep->poli, $border);
 		$pdf->Cell($widthCell, $heightCell,'Kls.Rawat', $border);
 		if( $sep->klsRawat->klsRawatNaik != '' ){
-			$pdf->Cell($widthCellData2, $heightCell,': '.$this->_dataKelasRawat($sep->klsRawat->klsRawatNaik), $border);
+			$pdf->Cell($widthCellData2, $heightCell,': '.strtoupper($this->_dataKelasRawat($sep->klsRawat->klsRawatNaik)), $border);
 		}else{
-			$pdf->Cell($widthCellData2, $heightCell,': Kelas '.$sep->klsRawat->klsRawatHak, $border);
+			$pdf->Cell($widthCellData2, $heightCell,': KELAS '.strtoupper($sep->klsRawat->klsRawatHak), $border);
 		}
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Dokter', $border);
-		$pdf->Cell($widthCellData, $heightCell,': ', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$sep->dpjp->nmDPJP, $border);
 		$pdf->Cell($widthCell, $heightCell,'Penjamin', $border);
 		$pdf->Cell($widthCellData2, $heightCell,': '.$sep->penjamin, $border);
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Faskes Perujuk', $border);
-		$pdf->Cell($widthCellData, $heightCell,': ', $border);
+		$pdf->Cell($widthCellData, $heightCell,': '.$rujukan->provPerujuk->nama, $border);
 
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Diagnosa Awal', $border);

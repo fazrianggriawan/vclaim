@@ -18,7 +18,7 @@ class Sep extends Controller
         $data['request']['t_sep'] =
             array(
                 'noKartu'        => $request->noKartu,
-                'tglSep'        => $request->tglSep,
+                'tglSep'        => date('Y-m-d'), // $request->tglSep
                 'ppkPelayanan' => VclaimLib::getPPK(),
                 'jnsPelayanan' => $request->jnsPelayanan,
                 'klsRawat'        => array(
@@ -76,25 +76,28 @@ class Sep extends Controller
                 'user'             => 'Vclaim',
             );
 
-        $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
+        //return json_encode($data);
 
-        $dataResponse = json_decode($response);
+        return $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
 
-        $noSep = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->sep->noSep : '';
+        // $dataResponse = json_decode($response);
 
-        $insert = array(
-            'noSep' => $noSep,
-            'noTlp' => $request->tlp,
-            'norm' => $request->norm,
-            'tujuanKunj' => $request->tujuanKunj,
-            'request' => json_encode($data),
-            'response' => $response,
-            'response_code' => $dataResponse->metaData->code,
-        );
 
-        DB::table('vclaim_sep')->insert($insert);
+        // $noSep = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->sep->noSep : '';
 
-        return $response;
+        // $insert = array(
+        //     'noSep' => $noSep,
+        //     'noTlp' => $request->tlp,
+        //     'norm' => $request->norm,
+        //     'tujuanKunj' => $request->tujuanKunj,
+        //     'request' => json_encode($data),
+        //     'response' => $response,
+        //     'response_code' => $dataResponse->metaData->code,
+        // );
+
+        // DB::table('vclaim_sep')->insert($insert);
+
+        // return $response;
     }
 
     public function GetByNomorSep($nomorSep)
