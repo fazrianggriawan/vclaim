@@ -68,14 +68,14 @@ class SuratKontrol extends Controller
 
         $noSuratKontrol = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->noSuratKontrol : '';
 
-        $insert = array(
-            'noSuratKontrol' => $noSuratKontrol,
-            'request' => json_encode($data),
-            'response' => $response,
-            'response_code' => $dataResponse->metaData->code,
-        );
+        // $insert = array(
+        //     'noSuratKontrol' => $noSuratKontrol,
+        //     'request' => json_encode($data),
+        //     'response' => $response,
+        //     'response_code' => $dataResponse->metaData->code,
+        // );
 
-        DB::table('vclaim_surat_kontrol')->insert($insert);
+        // DB::table('vclaim_surat_kontrol')->insert($insert);
 
         return $response;
     }
