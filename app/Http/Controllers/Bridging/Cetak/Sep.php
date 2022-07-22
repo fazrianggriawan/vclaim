@@ -156,9 +156,6 @@ class Sep extends Controller
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
         if( $data ){
             if( $data->metaData->code == '200' ){
-                // $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
-                // $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
-
                 return $this->PrintSepAnjungan($data->response, $kodeBooking);
             }else{
                 return $this->metaData->message;
@@ -293,19 +290,8 @@ class Sep extends Controller
 		$pdf->Cell(140, 5,'', $border);
 		$pdf->Cell(45, 5,'_______________________', $border);
 
-		//  Bukti Registrasi
-
-        $data = DB::table('antrian')
-			->where('booking_code', $kodeBooking)
-			->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
-			->get();
-
-		$jadwalDokter = json_decode($data[0]->jadwalDokter);
-		$pasien = json_decode($data[0]->pasien);
-
-        $pdf->AutoPrint();
-
 		$pdf->Output();
+        $pdf->AutoPrint();
         exit;
     }
 
@@ -361,8 +347,8 @@ class Sep extends Controller
         $pdf->Ln(8);
         $pdf->Cell($widthCell, $heightCell,'.', $border);
 
-        $pdf->AutoPrint();
 		$pdf->Output();
+        $pdf->AutoPrint();
         exit;
     }
 
