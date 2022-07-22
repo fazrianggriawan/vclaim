@@ -290,8 +290,9 @@ class Sep extends Controller
 		$pdf->Cell(140, 5,'', $border);
 		$pdf->Cell(45, 5,'_______________________', $border);
 
-		$pdf->Output();
         $pdf->AutoPrint();
+
+		$pdf->Output();
         exit;
     }
 
@@ -347,8 +348,9 @@ class Sep extends Controller
         $pdf->Ln(8);
         $pdf->Cell($widthCell, $heightCell,'.', $border);
 
-		$pdf->Output();
         $pdf->AutoPrint();
+
+		$pdf->Output();
         exit;
     }
 
