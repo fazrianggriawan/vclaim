@@ -170,6 +170,13 @@ class Sep extends Controller
 
     public function PrintSepAnjungan($sep, $kodeBooking)
     {
+        $data = DB::table('antrian')
+                ->where('booking_code', $kodeBooking)
+                ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
+                ->get();
+
+        return view('sep-anjungan', ['sep'=>$sep, 'registrasi'=>$data[0], 'rujukan'=>json_decode($data[0]->rujukan)]);
+
         header("Content-type:application/pdf");
 
 		$pdf = new PDFBarcode();
@@ -188,7 +195,8 @@ class Sep extends Controller
 		$widthCellData2 = 58;
 		$fontWeight = '';
 
-		$pdf->AddPage('L', [80,190], 270);
+		//$pdf->AddPage('L', [80,190], 270);
+        $pdf->AddPage('L', [80,190]);
         $pdf->SetFont('arial', 'B', 12);
         $pdf->SetAutoPageBreak(TRUE, 0);
         $heightCell = 4;
@@ -209,7 +217,6 @@ class Sep extends Controller
 		$pdf->Ln();
 		$pdf->Cell($widthCell, $heightCell,'Tgl.SEP', $border);
 		$pdf->Cell($widthCellData, $heightCell,': '.$sep->tglSep, $border);
-
 		$pdf->Cell($widthCell, $heightCell,'Peserta', $border);
 		$pdf->Cell($widthCellData2, $heightCell,': '.$sep->peserta->jnsPeserta, $border);
 
