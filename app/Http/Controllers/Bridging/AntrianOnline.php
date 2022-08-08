@@ -159,8 +159,8 @@ class AntrianOnline extends Controller
         $post = json_decode(file_get_contents("php://input"));
 
         $data = array(
-                    'booking_code' => $post->kodeBooking,
-                    'tgl_kunjungan' => $post->tglKunjungan,
+                    'booking_code' => $post->kodebooking,
+                    'tgl_kunjungan' => $post->tanggalperiksa,
                     'dateCreated' => date('Y-m-d h:i:s')
                 );
 
