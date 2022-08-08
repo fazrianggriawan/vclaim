@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class AntrianOnline extends Controller
 {
+
     public function Save()
 	{
         $request = json_decode(file_get_contents("php://input"));
@@ -149,6 +150,29 @@ class AntrianOnline extends Controller
                 ->get();
 
         return AppLib::response(200, $data, 'Success');
+    }
+
+    public function CheckIn()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        $post = json_decode(file_get_contents("php://input"));
+
+        $data = array(
+                    'booking_code' => $post->kodeBooking,
+                    'tgl_kunjungan' => $post->tglKunjungan,
+                    'dateCreated' => date('Y-m-d h:i:s')
+                );
+
+        $insert = DB::table('antrian_checkin')->insert($data);
+
+        if( $insert ){
+            return AppLib::response(200, [], 'Sukses');
+        }else{
+            return AppLib::response(201, [], 'Data gagal disimpan');
+        }
+
+
     }
 
 
