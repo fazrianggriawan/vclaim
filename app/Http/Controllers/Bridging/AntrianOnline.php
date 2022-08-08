@@ -161,7 +161,7 @@ class AntrianOnline extends Controller
         $data = array(
                     'booking_code' => $post->kodebooking,
                     'tgl_kunjungan' => $post->tanggalperiksa,
-                    'dateCreated' => date('Y-m-d h:i:s')
+                    'dateCreated' => date('Y-m-d H:i:s')
                 );
 
         $insert = DB::table('antrian_checkin')->insert($data);
