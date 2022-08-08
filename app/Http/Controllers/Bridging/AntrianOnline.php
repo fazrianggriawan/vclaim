@@ -158,21 +158,25 @@ class AntrianOnline extends Controller
 
         $post = json_decode(file_get_contents("php://input"));
 
-        $data = array(
-                    'booking_code' => $post->kodebooking,
-                    'tgl_kunjungan' => $post->tanggalperiksa,
-                    'dateCreated' => date('Y-m-d H:i:s')
-                );
+        $isCheckedIn = DB::table('antrian_checkin')->where('booking_code', $post->kodebooking)->get();
 
-        $insert = DB::table('antrian_checkin')->insert($data);
-
-        if( $insert ){
-            return AppLib::response(200, [], 'Sukses');
+        if( count($isCheckedIn) > 0 ){
+            return AppLib::response(201, [], 'Data sudah check in pada '.$isCheckedIn[0]->dateCreated.'. Tidak dapet check in lagi.');
         }else{
-            return AppLib::response(201, [], 'Data gagal disimpan');
+            $data = array(
+                'booking_code' => $post->kodebooking,
+                'tgl_kunjungan' => $post->tanggalperiksa,
+                'dateCreated' => date('Y-m-d H:i:s')
+            );
+
+            $insert = DB::table('antrian_checkin')->insert($data);
+
+            if( $insert ){
+                return AppLib::response(200, [], 'Sukses');
+            }else{
+                return AppLib::response(201, [], 'Data gagal disimpan');
+            }
         }
-
-
     }
 
 
