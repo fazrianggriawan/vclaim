@@ -15,7 +15,7 @@ function dataKelasRawat($var = null)
 
 function dateHuman($date){
     $arrDate = explode('-', $date);
-    return $arrDate[2].'-'.$arrDate[1].'-'.$arrDate[0].'-';
+    return $arrDate[2].'-'.$arrDate[1].'-'.$arrDate[0];
 }
 ?>
 <style>
