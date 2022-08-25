@@ -170,7 +170,7 @@ class Sep extends Controller
     public function PrintSepAnjungan($sep, $kodeBooking)
     {
         $data = DB::table('antrian')
-                ->where('booking_code', $kodeBooking)
+                ->where('antrian.booking_code', $kodeBooking)
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                 ->get();
 
@@ -185,7 +185,7 @@ class Sep extends Controller
     public function DataBooking($kodeBooking)
     {
         $data = DB::table('antrian')
-                ->where('booking_code', $kodeBooking)
+                ->where('antrian.booking_code', $kodeBooking)
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                 ->get();
 
