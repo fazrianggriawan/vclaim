@@ -64,7 +64,9 @@ function dataKelasRawat($var = null)
             <td>Tgl.Lahir</td>
             <td>: <?= $sep->peserta->tglLahir ?></td>
             <td>Poli Perujuk</td>
-            <td>: <?= '' ?></td>
+            <td>:
+                <?php if($registrasi->jns_kunjungan == '2'){ echo $rujukan->poliRujukan->nama; } ?>
+            </td>
         </tr>
         <tr>
             <td>No.Telepon</td>
