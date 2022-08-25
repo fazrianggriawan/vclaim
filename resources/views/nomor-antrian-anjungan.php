@@ -12,6 +12,7 @@
 <div class="container">
     <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: center;">
         <div>RUMAH SAKIT SALAK - BOGOR</div>
+        <div style="width: 300px; text-align:right; margin-top: -20px;">.</div>
         <?php if( $tipe == 'tni' ){ ?><div>TNI / KELUARGA / PURNAWIRAWAN</div> <?php } ?>
         <?php if( $tipe == 'bpjs' ){ ?><div>BPJS KESEHATAN</div> <?php } ?>
         <?php if( $tipe == 'tunai' ){ ?><div>PASIEN UMUM</div> <?php } ?>
@@ -36,8 +37,6 @@
             <div style="text-align: center; margin-top: 20px;">.</div>
         </div>
     </div>
-
-    <div style="width: 300px; text-align:right; margin-top: -20px;">.</div>
 </div>
 
 <script>
