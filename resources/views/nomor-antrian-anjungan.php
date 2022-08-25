@@ -30,7 +30,7 @@
         <?php if( $tipe == 'bpjs' ){ ?> <div>Silahkan Menunggu di Loket 3 atau 4</div> <?php } ?>
         <?php if( $tipe == 'tni' ){ ?> <div>Silahkan Menunggu di Loket 5 atau 6</div> <?php } ?>
 
-        <div>Tgl. Cetak : <? echo date('d-m-Y')?> Jam : <? echo date('H:i:s') ?></div>
+        <div>Tgl. Cetak : <?php echo date('d-m-Y')?> Jam : <?php echo date('H:i:s') ?></div>
     </div>
 </div>
 
