@@ -18,14 +18,15 @@ function dataKelasRawat($var = null)
         position: fixed;
         width: 100%;
         height: 100%;
-        top: 5px;
-        left: 5px;
+        top: 0px;
+        left: 0px;
         font-family: Arial, Helvetica, sans-serif;
         line-height: 16px;
     }
 
     table tr td{
         font-size: 12px;
+        vertical-align: top;
     }
 </style>
 <div class="container">
@@ -35,35 +36,43 @@ function dataKelasRawat($var = null)
     <table cellpadding="0" cellspacing="1" border="0">
         <tr>
             <td width="100">Kode Booking</td>
-            <td>: <?= $registrasi->booking_code ?></td>
+            <td width="10">:</td>
+            <td width="200"><?= $registrasi->booking_code ?></td>
         </tr>
         <tr>
             <td>Tanggal</td>
-            <td>: <?= $jadwalDokter->tglKunjungan ?></td>
+            <td>:</td>
+            <td><?= $jadwalDokter->tglKunjungan ?></td>
         </tr>
         <tr>
             <td>No.RM</td>
-            <td>: <?= substr($pasien->norekmed, -6) ?></td>
+            <td>:</td>
+            <td><?= substr($pasien->norekmed, -6) ?></td>
         </tr>
         <tr>
             <td>Nama</td>
-            <td>: <?= $pasien->nama ?></td>
+            <td>:</td>
+            <td><?= $pasien->nama ?></td>
         </tr>
         <tr>
             <td>No.BPJS</td>
-            <td>: <?= $pasien->noaskes ?></td>
+            <td>:</td>
+            <td><?= $pasien->noaskes ?></td>
         </tr>
         <tr>
             <td>Poliklinik</td>
-            <td>: <?= $jadwalDokter->namapoli ?></td>
+            <td>:</td>
+            <td><?= $jadwalDokter->namapoli ?></td>
         </tr>
         <tr>
             <td>Dokter</td>
-            <td>: <?= $jadwalDokter->namadokter ?></td>
+            <td>:</td>
+            <td><?= $jadwalDokter->namadokter ?></td>
         </tr>
     </table>
+    <div style="width: 320px; text-align: right;">.</div>
 </div>
 
 <script>
-    window.print();
+    // window.print();
 </script>
