@@ -28,11 +28,11 @@
             <?php if( $tipe == 'tni' ){ ?> <div>Silahkan Menunggu di Loket 5 atau 6</div> <?php } ?>
 
             <div>Tgl. Cetak : <?php echo date('d-m-Y')?> Jam : <?php echo date('H:i:s') ?></div>
+            <div style="text-align: center; margin-top: 20px;">.</div>
         </div>
-
     </div>
 
-    <div style="width: 300px; text-align:right;">.</div>
+    <div style="width: 300px; text-align:right; margin-top: -20px;">.</div>
 </div>
 
 <script>
