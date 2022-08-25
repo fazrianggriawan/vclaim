@@ -7,7 +7,6 @@
         left: 5px;
         font-family: Arial, Helvetica, sans-serif;
         line-height: 16px;
-        text-align: center;
     }
 </style>
 <div class="container">
