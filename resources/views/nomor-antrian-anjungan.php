@@ -3,6 +3,8 @@
         position: fixed;
         width: 270px;
         height: 100%;
+        top: 0;
+        left: 0;
         font-family: Arial, Helvetica, sans-serif;
         line-height: 16px;
     }
