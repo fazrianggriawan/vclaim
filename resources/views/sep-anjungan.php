@@ -109,5 +109,5 @@ function dataKelasRawat($var = null)
 </div>
 
 <script>
-    // window.print();
+    window.print();
 </script>
