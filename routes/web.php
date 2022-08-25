@@ -60,6 +60,8 @@ $router->get('sep/print/anjungan/{nomorSep}/{kodeBooking}', 'Bridging\Cetak\Sep@
 $router->get('sep/print/booking/{kodeBooking}', 'Bridging\Cetak\Sep@DataBooking' );
 $router->get('rujukan/print/{nomorRujukan}', 'Bridging\Cetak\Rujukan@Index' );
 $router->get('rujukan/print/keluar/{data}', 'Bridging\Cetak\Rujukan@RujukanKeluar' );
+$router->get('print/anjungan/nomor_antrian/{tipe}/{noAntrian}', 'Bridging\Cetak\Antrian@NomorAntrian' );
+
 
 /* Master */
 $router->get('master/poliklinik', 'Master@Poliklinik' );
