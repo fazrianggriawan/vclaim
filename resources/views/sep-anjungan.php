@@ -12,6 +12,11 @@ function dataKelasRawat($var = null)
     );
     return $data[$var];
 }
+
+function dateHuman($date){
+    $arrDate = explode('-', $date);
+    return $arrDate[2].'-'.$arrDate[1].'-'.$arrDate[0].'-';
+}
 ?>
 <style>
     .container {
@@ -40,7 +45,7 @@ function dataKelasRawat($var = null)
         </tr>
         <tr>
             <td>Tgl.SEP</td>
-            <td>: <?= $sep->tglSep ?></td>
+            <td>: <?= dateHuman($sep->tglSep) ?></td>
             <td width="100">Peserta</td>
             <td>: <?= $sep->peserta->jnsPeserta ?></td>
         </tr>
@@ -62,11 +67,9 @@ function dataKelasRawat($var = null)
         </tr>
         <tr>
             <td>Tgl.Lahir</td>
-            <td>: <?= $sep->peserta->tglLahir ?></td>
+            <td>: <?= dateHuman($sep->peserta->tglLahir) ?></td>
             <td>Poli Perujuk</td>
-            <td>:
-                <?php if($registrasi->jns_kunjungan == '2'){ echo $rujukan->poliRujukan->nama; } ?>
-            </td>
+            <td>: <?= $rujukan->poliRujukan->nama; ?></td>
         </tr>
         <tr>
             <td>No.Telepon</td>
