@@ -18,8 +18,8 @@ function dataKelasRawat($var = null)
         position: fixed;
         width: 100%;
         height: 100%;
-        top: 5px;
-        left: 5px;
+        top: 0px;
+        left: 0px;
         font-family: Arial, Helvetica, sans-serif;
         line-height: 16px;
     }
@@ -99,12 +99,15 @@ function dataKelasRawat($var = null)
             </td>
             <td>
                 <div>Pasien/Keluarga Pasien</div>
-                <div style="margin-top: 30px;">______________________</div>
+                <div style="margin-top: 30px;">
+                    ______________________
+                    <div style="width: 180px; text-align: right; margin-top: -10px;">.</div>
+                </div>
             </td>
         </tr>
     </table>
 </div>
 
 <script>
-    window.print();
+    // window.print();
 </script>
