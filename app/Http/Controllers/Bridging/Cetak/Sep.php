@@ -154,6 +154,7 @@ class Sep extends Controller
     public function Anjungan($nomorSep, $kodeBooking)
     {
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
+
         if( $data ){
             if( $data->metaData->code == '200' ){
                 $this->PrintSepAnjungan($data->response, $kodeBooking);
@@ -173,7 +174,12 @@ class Sep extends Controller
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                 ->get();
 
-        return view('sep-anjungan', ['sep'=>$sep, 'registrasi'=>$data[0], 'rujukan'=>json_decode($data[0]->rujukan)]);
+        if( count($data) > 0 ){
+            return view('sep-anjungan', ['sep'=>$sep, 'registrasi'=>$data[0], 'rujukan'=>json_decode($data[0]->rujukan)]);
+        }else{
+            return '';
+        }
+
     }
 
     public function DataBooking($kodeBooking)
@@ -183,7 +189,11 @@ class Sep extends Controller
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                 ->get();
 
-        return view('registrasi-online', ['registrasi'=>$data[0], 'pasien'=>json_decode($data[0]->pasien), 'jadwalDokter'=>json_decode($data[0]->jadwalDokter) ]);
+        if( count($data) > 0 ){
+            return view('registrasi-online', ['registrasi'=>$data[0], 'pasien'=>json_decode($data[0]->pasien), 'jadwalDokter'=>json_decode($data[0]->jadwalDokter) ]);
+        }else{
+            return '';
+        }
 
     }
 
