@@ -156,14 +156,12 @@ class Sep extends Controller
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
         if( $data ){
             if( $data->metaData->code == '200' ){
-                return $this->PrintSepAnjungan($data->response, $kodeBooking);
+                $this->PrintSepAnjungan($data->response, $kodeBooking);
             }else{
-                return $this->metaData->message;
-                exit;
+                return $data->metaData->message;
             }
         }else{
             return 'Terjadi Gangguan Pada Server BPJS.';
-            exit;
         }
 
     }
