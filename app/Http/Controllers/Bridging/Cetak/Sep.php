@@ -157,7 +157,7 @@ class Sep extends Controller
 
         if( $data ){
             if( $data->metaData->code == '200' ){
-                $this->PrintSepAnjungan($data->response, $kodeBooking);
+                return $this->PrintSepAnjungan($data->response, $kodeBooking);
             }else{
                 return $data->metaData->message;
             }
