@@ -54,7 +54,11 @@ function dataKelasRawat($var = null)
             <td>Nama Peserta</td>
             <td>: <?= $sep->peserta->nama ?></td>
             <td>Jns.Kunjungan</td>
-            <td>: <?= ($registrasi->jns_kunjungan == '3') ? 'RENCANA KONTROL' : 'RUJUKAN BARU' ?></td>
+            <td>:
+                <?php if($registrasi->jns_kunjungan == '3'){ echo 'RENCANA KONTROL'; } ?>
+                <?php if($registrasi->jns_kunjungan == '2'){ echo 'RUJUKAN INTERNAL'; } ?>
+                <?php if($registrasi->jns_kunjungan == '1'){ echo 'RUJUKAN BARU'; } ?>
+            </td>
         </tr>
         <tr>
             <td>Tgl.Lahir</td>
