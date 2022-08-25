@@ -28,6 +28,11 @@
             <?php if( $tipe == 'tni' ){ ?> <div>Silahkan Menunggu di Loket 5 atau 6</div> <?php } ?>
 
             <div>Tgl. Cetak : <?php echo date('d-m-Y')?> Jam : <?php echo date('H:i:s') ?></div>
+            <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid black;">
+                Lebih Mudah Dengan <br> Registrasi Online <br>
+                www.rssalakbogor.co.id/registrasi
+                <img src="/vclaim/public/qrregistrasi.jpg" style="width: 50%;"/>
+            </div>
             <div style="text-align: center; margin-top: 20px;">.</div>
         </div>
     </div>
@@ -36,5 +41,5 @@
 </div>
 
 <script>
-    window.print();
+    // window.print();
 </script>
