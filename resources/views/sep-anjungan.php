@@ -13,9 +13,10 @@ function dataKelasRawat($var = null)
     return $data[$var];
 }
 
-function dateHuman($date){
+function dateHuman($date)
+{
     $arrDate = explode('-', $date);
-    return $arrDate[2].'-'.$arrDate[1].'-'.$arrDate[0];
+    return $arrDate[2] . '-' . $arrDate[1] . '-' . $arrDate[0];
 }
 ?>
 <style>
@@ -29,7 +30,7 @@ function dateHuman($date){
         line-height: 16px;
     }
 
-    table tr td{
+    table tr td {
         font-size: 12px;
     }
 </style>
@@ -60,9 +61,17 @@ function dateHuman($date){
             <td>: <?= $sep->peserta->nama ?></td>
             <td>Jns.Kunjungan</td>
             <td>:
-                <?php if($registrasi->jns_kunjungan == '3'){ echo 'RENCANA KONTROL'; } ?>
-                <?php if($registrasi->jns_kunjungan == '2'){ echo 'RUJUKAN INTERNAL'; } ?>
-                <?php if($registrasi->jns_kunjungan == '1'){ echo 'RUJUKAN BARU'; } ?>
+                <?php if (isset($registrasi->jns_kunjungan)) {
+                    if ($registrasi->jns_kunjungan == '3') {
+                        echo 'RENCANA KONTROL';
+                    }
+                    if ($registrasi->jns_kunjungan == '2') {
+                        echo 'RUJUKAN INTERNAL';
+                    }
+                    if ($registrasi->jns_kunjungan == '1') {
+                        echo 'RUJUKAN BARU';
+                    }
+                } ?>
             </td>
         </tr>
         <tr>

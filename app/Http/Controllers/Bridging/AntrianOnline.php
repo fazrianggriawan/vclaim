@@ -116,8 +116,46 @@ class AntrianOnline extends Controller
             'jadwalDokter' => json_encode($request->jadwalDokter),
             'dateCreated' => date('Y-m-d H:i:s')
         );
+
+        if( $request->suratKontrol != '' ){
+            $this->saveDetailSuratKontrol($request->suratKontrol, $dataAntrian);
+        }
+
+        $this->saveDetailRujukan($request->rujukan, $dataAntrian);
+        $this->saveDetailJadwal($request->jadwalDokter, $dataAntrian);
+
         $insert = DB::table('antrian_detail')->insert($dataInsert);
+
         return ( $insert ) ? $dataInsert : FALSE;
+    }
+
+    private function saveDetailSuratKontrol($data, $dataAntrian) {
+        $insertData = array(
+            'booking_code' => $dataAntrian[0]->booking_code,
+            'nomor' => $data->noSuratKontrol,
+            'surat_kontrol' => json_encode($data),
+            'dateCreated' => date('Y-m-d H:i:s')
+        );
+        DB::table('antrian_detail_surat_kontrol')->insert($insertData);
+    }
+
+    private function saveDetailRujukan($data, $dataAntrian) {
+        $insertData = array(
+            'booking_code' => $dataAntrian[0]->booking_code,
+            'nomor' => $data->noKunjungan,
+            'rujukan' => json_encode($data),
+            'dateCreated' => date('Y-m-d H:i:s')
+        );
+        DB::table('antrian_detail_rujukan')->insert($insertData);
+    }
+
+    private function saveDetailJadwal($data, $dataAntrian) {
+        $insertData = array(
+            'booking_code' => $dataAntrian[0]->booking_code,
+            'jadwal_dokter' => json_encode($data),
+            'dateCreated' => date('Y-m-d H:i:s')
+        );
+        DB::table('antrian_detail_jadwal_dokter')->insert($insertData);
     }
 
     private function EstimasiWaktuDilayani($jadwal, $noAntrian, $tglKunjungan)
@@ -135,7 +173,11 @@ class AntrianOnline extends Controller
                     ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                     ->where('booking_code', $kodeBooking)
                     ->get();
-        return AppLib::response(200, $data[0], 'Success');
+        if( count($data) > 0 ){
+            return AppLib::response(200, $data[0], 'Success');
+        }else{
+            return AppLib::response(201, array(), 'Data Tidak Ditemukan');
+        }
     }
 
     public function FilterData()

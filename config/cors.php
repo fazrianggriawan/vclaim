@@ -1,4 +1,6 @@
 <?php
+    date_default_timezone_set("Asia/Jakarta");
+
     // header('Access-Control-Allow-Origin: http://localhost:4200');
     // Allow from any origin
     if (isset($_SERVER['HTTP_ORIGIN'])) {

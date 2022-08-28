@@ -179,8 +179,17 @@ class Sep extends Controller
         }else{
             return '';
         }
-
     }
+
+    public function PrintSepOnly($nomorSep)
+    {
+        $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
+        if( $data->metaData->code == '200' ){
+            $rujukan = json_decode( VclaimLib::exec('GET', 'Rujukan/'.$data->response->noRujukan) );
+            return view('sep-anjungan', ['sep'=>$data->response, 'registrasi'=>array(), 'rujukan'=>$rujukan->response->rujukan]);
+        }
+    }
+
 
     public function DataBooking($kodeBooking)
     {

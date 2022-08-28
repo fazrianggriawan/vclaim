@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Bridging;
 
 use App\Http\Controllers\Controller;
-use App\Http\Libraries\AppLib;
 use App\Http\Libraries\VclaimLib;
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\DB;
 
 class Sep extends Controller
@@ -18,7 +16,7 @@ class Sep extends Controller
         $data['request']['t_sep'] =
             array(
                 'noKartu'        => $request->noKartu,
-                'tglSep'        => date('Y-m-d'), // $request->tglSep
+                'tglSep'        => date('Y-m-d'),
                 'ppkPelayanan' => VclaimLib::getPPK(),
                 'jnsPelayanan' => $request->jnsPelayanan,
                 'klsRawat'        => array(
@@ -76,29 +74,35 @@ class Sep extends Controller
                 'user'             => 'Vclaim',
             );
 
-        //return json_encode($data);
+        $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
 
-        return $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
+        if( isset($request->kodeBooking) ){
+            $this->saveSepRegistrasi($request->kodeBooking, $response, $request);
+        }
 
-        // $dataResponse = json_decode($response);
-
-
-        // $noSep = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->sep->noSep : '';
-
-        // $insert = array(
-        //     'noSep' => $noSep,
-        //     'noTlp' => $request->tlp,
-        //     'norm' => $request->norm,
-        //     'tujuanKunj' => $request->tujuanKunj,
-        //     'request' => json_encode($data),
-        //     'response' => $response,
-        //     'response_code' => $dataResponse->metaData->code,
-        // );
-
-        // DB::table('vclaim_sep')->insert($insert);
-
-        // return $response;
+        return $response;
     }
+
+    public function SaveSepRegistrasi($kodeBooking, $response, $request)
+    {
+        if( isset($kodeBooking) ){
+            $res = json_decode($response);
+            if( $res->metaData->code == '200' ){
+                $sep = $res->metaData->response->sep;
+                if( strlen($sep->noSep) > 12 ){
+                    $insertData = array(
+                        'booking_code' => $kodeBooking,
+                        'nomor' => $sep->noSep,
+                        'no_bpjs' => $request->noKartu,
+                        'sep' => json_encode($sep),
+                        'dateCreated' => date('Y-m-d H:i:s')
+                    );
+                    DB::table('antrian_detail_sep')->insert($insertData);
+                }
+            }
+        }
+    }
+
 
     public function GetByNomorSep($nomorSep)
     {
