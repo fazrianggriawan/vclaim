@@ -223,8 +223,8 @@ class AntrianOnline extends Controller
 
     public function AntrianByJadwal($jamPraktek, $kodePoli, $tglKunjungan)
     {
-        $data = DB::table('antrian_checkin')
-                ->leftJoin('antrian', 'antrian.booking_code', '=', 'antrian_checkin.booking_code')
+        $data = DB::table('antrian')
+                ->leftJoin('antrian_checkin', 'antrian.booking_code', '=', 'antrian_checkin.booking_code')
                 ->leftJoin('antrian_call', 'antrian_call.id_antrian', '=', 'antrian.id')
                 ->where('antrian.jam_praktek', $jamPraktek)
                 ->where('antrian.poli', $kodePoli)
