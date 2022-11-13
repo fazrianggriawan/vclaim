@@ -28,6 +28,7 @@ $router->get('history/nomorKartu/{nomorKartu}/from/{from}/to/{to}', 'Bridging\Mo
 /* Peserta */
 $router->get('peserta/nomorKartu/{nomorKartu}', 'Bridging\Peserta@GetByNomorKartu' );
 $router->get('peserta/nik/{nik}', 'Bridging\Peserta@GetByNik' );
+$router->get('peserta/fingerPrint/{noKartu}/{tanggal}', 'Bridging\Peserta@GetFingerPrint' );
 
 /* Rujukan */
 $router->get('rujukan/nomorRujukan/{nomorRujukan}', 'Bridging\Rujukan@GetByNomorRujukan' );
@@ -70,6 +71,7 @@ $router->get('master/poliklinik', 'Master@Poliklinik' );
 /* Antrian Online */
 $router->get('antrian/kodeBooking/{kodeBooking}', 'Bridging\AntrianOnline@GetAntrian' );
 $router->get('antrian/byJadwal/{jamPraktek}/{kodePoli}/{tglKunjungan}', 'Bridging\AntrianOnline@AntrianByJadwal' );
+$router->get('antrian/dashboard', 'Bridging\AntrianOnline@DashboardAntrian' );
 $router->post('antrian/filterData', 'Bridging\AntrianOnline@FilterData' );
 $router->post('antrian/save', 'Bridging\AntrianOnline@Save' );
 $router->post('antrian/checkin', 'Bridging\AntrianOnline@Checkin' );

@@ -19,7 +19,7 @@ class Rujukan extends Controller
         if( $data ){
             $data = json_decode($data);
             if( $data->metaData->code == '200' ){
-                $data->response->rujukan->provPerujuk->nama = 'RS Tk II Prof dr J.A LATUMETEN';
+                $data->response->rujukan->provPerujuk->nama = 'RUMAH SAKIT TK.III 03.06.02 SALAK';
                 $this->doPrint($data->response);
             }else{
                 return $this->metaData->message;
@@ -70,7 +70,7 @@ class Rujukan extends Controller
         $pdf->Cell($widthCell);
 		$pdf->Cell($widthCellData-20, $heightCell,'No. '.$data->rujukan->noKunjungan, $border);
 		$pdf->Ln(5);
-		$pdf->Cell($widthCellData, 5,'RS Tk II Prof dr J.A LATUMETEN', $border);
+		$pdf->Cell($widthCellData, 5,'RUMAH SAKIT TK.III 03.06.02 SALAK', $border);
         $pdf->Cell($widthCell);
 		$pdf->SetFont('arial', '', 10);
 		$pdf->Cell($widthCellData-20, $heightCell,'Tgl. '.$this->mailDateFormat($data->rujukan->tglKunjungan), $border);

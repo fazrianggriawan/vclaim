@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Master;
 use App\Http\Libraries\AntrolLib;
 use App\Http\Libraries\AppLib;
+use DateInterval;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class AntrianOnline extends Controller
@@ -27,7 +29,6 @@ class AntrianOnline extends Controller
         if( !$dataAntrian ){
             return AppLib::response(201, array(), 'Data Gagal Disimpan');
         }
-
 
         $totalKuota = 80;
 
@@ -224,6 +225,7 @@ class AntrianOnline extends Controller
     public function AntrianByJadwal($jamPraktek, $kodePoli, $tglKunjungan)
     {
         $data = DB::table('antrian')
+                ->select('antrian.*')
                 ->leftJoin('antrian_checkin', 'antrian.booking_code', '=', 'antrian_checkin.booking_code')
                 ->leftJoin('antrian_call', 'antrian_call.id_antrian', '=', 'antrian.id')
                 ->where('antrian.jam_praktek', $jamPraktek)
@@ -233,6 +235,90 @@ class AntrianOnline extends Controller
 
         return AppLib::response(200, $data, 'sukses');
     }
+
+    public function DashboardAntrian()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+
+		if( date('H') < 12 ){
+            $jadwal = '<';
+        }else{
+            $jadwal = '>';
+        }
+
+        $antrian = self::_antrian_by_poli();
+
+        print_r($antrian);
+        exit;
+
+		$res = $data = array();
+
+		foreach ($antrian as $key => $value) {
+			$data = array(
+				'poli' => $value,
+				'waiting' => self::_antrian_by_poli($value->kode, 'waiting'),
+				'called' => self::_antrian_by_poli($value->kode, 'called'),
+			);
+
+			if( count($data['waiting']) > 0 )
+				$data['waiting']['estimasi'] = self::_estimasi_jam_layan(date('Y-m-d H:i:s'), 2);
+
+			if( count($data['called']) > 0 )
+				$data['called']['estimasi'] = self::_estimasi_jam_layan($data['called'][0]->call_time, 10);
+
+			$res['antrian'][] = $data;
+		}
+
+		$res['info'] = array(
+			'tanggal' => date('d M Y, H:i'),
+			'jadwal' => ( date('H') < 12 ) ? 'POLI PAGI (08:00-12:00)' : 'POLI SORE (14:00-20:00)'
+		);
+
+        return AppLib::response(200, $res, 'sukses');
+
+	}
+
+    public function _antrian_by_poli($idPoli='', $status_call='')
+    {
+        if( date('H') < 12 ){
+            $jadwal = '<';
+        }else{
+            $jadwal = '>';
+        }
+
+        $tanggal = "'".date('Y-m-d')."'";
+
+        $antrian = DB::table('antriana')
+                ->select('mst_ruangan.name as nama_poli', 'mst_poli.prefix_antrian', 'mst_poli.kode_bpjs as kode', 'antrian.no_antrian', 'antrian_call.call_time')
+                ->leftJoin('antrian_call', 'antrian_call.id_antrian', '=', 'antrian.id')
+                ->leftJoin('mst_poli', 'mst_poli.kode_bpjs', '=', 'antrian.poli')
+                ->leftJoin('mst_ruangan', 'mst_ruangan.id', '=', 'mst_poli.id_ruangan')
+                ->where('antrian.tgl_kunjungan', $tanggal)
+                ->where(DB::raw('LEFT( antrian.jam_praktek, 5 )'), $jadwal, ' \'12:00\' ');
+
+        if( $idPoli != '' ){
+            $antrian->where('antrian.poli', $idPoli);
+        }
+
+        if( $status_call == 'waiting' ){
+			$antrian->where('antrian_call.call_time');
+			$antrian->orderBy('antrian.no_antrian', 'asc');
+		}
+
+		if( $status_call == 'called' ){
+			$antrian->where('antrian_call.call_time', '<>', '');
+			$antrian->orderBy('antrian.no_antrian', 'desc');
+		}
+
+        return $antrian->orderBy('prefix_antrian', 'asc')->groupBy('antrian.poli')->get();
+    }
+
+    public function _estimasi_jam_layan($time, $addTime)
+	{
+		$time = new DateTime($time);
+		$time->add(new DateInterval('PT' . $addTime . 'M'));
+		return $time->format('H:i');
+	}
 
 
 

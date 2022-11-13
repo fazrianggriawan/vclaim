@@ -13,20 +13,24 @@ class Sep extends Controller
 {
     public function Index($nomorSep)
     {
-        $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
-        if( $data ){
-            if( $data->metaData->code == '200' ){
-                $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
-                $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
+        try {
+            $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
 
-                $this->doPrint($data->response, $peserta->response->peserta, $rujukan->response->rujukan);
+            if( $data ){
+                if( $data->metaData->code == '200' ){
+                    $peserta = json_decode(Peserta::GetByNomorKartu($data->response->peserta->noKartu));
+                    $rujukan = json_decode(Rujukan::GetByNomorRujukan($data->response->noRujukan));
+
+                    $this->doPrint($data->response, $peserta->response->peserta, $rujukan->response->rujukan);
+                }else{
+                    return $data->metaData->message;
+                }
             }else{
-                return $this->metaData->message;
-                exit;
+                return 'Terjadi Gangguan Pada Server BPJS.';
             }
-        }else{
-            return 'Terjadi Gangguan Pada Server BPJS.';
-            exit;
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $th->getMessage();
         }
     }
 
@@ -130,8 +134,6 @@ class Sep extends Controller
 		$pdf->Ln(5);
 		$pdf->Cell(140, 5,'', $border);
 		$pdf->Cell(45, 5,'_______________________', $border);
-
-        $pdf->AutoPrint();
 
 		$pdf->Output();
         exit;

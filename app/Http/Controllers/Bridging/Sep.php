@@ -13,6 +13,8 @@ class Sep extends Controller
     {
         $request = json_decode(file_get_contents("php://input"));
 
+        VclaimLib::getSetting();
+
         $data['request']['t_sep'] =
             array(
                 'noKartu'        => $request->noKartu,
@@ -154,4 +156,11 @@ class Sep extends Controller
 
         return VclaimLib::exec('PUT', 'SEP/2.0/updtglplg', json_encode($data));
     }
+
+    public function GetFingerPrint($noKartu, $tanggal)
+    {
+        // $url = 'SEP/FingerPrint/Peserta/'.$noKartu.'/TglPelayanan/'.$tanggal;
+        // return VclaimLib::exec('GET', $url);
+    }
+
 }
