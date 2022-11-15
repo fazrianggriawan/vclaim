@@ -19,4 +19,11 @@ class Peserta extends Controller
 		$url = 'Peserta/nik/'.$nik.'/tglSEP/'.date('Y-m-d');
         return VclaimLib::exec('GET', $url);
 	}
+
+    public static function GetFingerPrint($noKartu, $tanggal)
+    {
+        $url = 'SEP/FingerPrint/Peserta/'.$noKartu.'/TglPelayanan/'.$tanggal;
+        return VclaimLib::exec('GET', $url);
+    }
+
 }

@@ -2,21 +2,12 @@
 
 namespace App\Http\Libraries;
 
+use Illuminate\Support\Facades\DB;
 use LZCompressor\LZString;
 
-// SALAK
-const URL 		= 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
-const CONS_ID 	= '24903';
-const SECRETKEY = '2kT3ADA426';
-const PPK 		= '1003R002';
-const USERKEY 	= '160373608a1a918cefd6fbc41bac4fd2';
-
-// AMBON
-// const URL = 'https://apijkn.bpjs-kesehatan.go.id/vclaim-rest';
-// const CONS_ID = '31907';
-// const SECRETKEY = '1mR60EB812';
-// const PPK = '2501R006';
-// const USERKEY = 'f7b2fe33396725df35fdb770addabd11';
+const ID_SETTING 	= 1;
+const API_TYPE 		= 'vclaim'; // vclaim or antrol
+const CONFIGURATION = 'production'; // dev or production
 
 class VclaimLib
 {
@@ -26,14 +17,29 @@ class VclaimLib
      * @return void
      */
 
-	public static function getUrl()
+    public static function getConsId($setting)
 	{
-		return URL;
+		return $setting->cons_id;
 	}
 
-	public static function getPPK()
+    public static function getUserkey($setting)
 	{
-		return PPK;
+		return $setting->userkey;
+	}
+
+	public static function getUrl($setting)
+	{
+		return $setting->rest_api;
+	}
+
+	public static function getPPK($setting)
+	{
+		return $setting->ppk;
+	}
+
+    public static function getSecretKey($setting)
+	{
+		return $setting->secretkey;
 	}
 
     public static function getTimestamp()
@@ -42,33 +48,46 @@ class VclaimLib
         return strval(time()-strtotime('1970-01-01 00:00:00'));
     }
 
-    public static function getDescryptKey()
+    public static function getDescryptKey($setting)
     {
-        return CONS_ID.SECRETKEY.self::getTimestamp();
+        return self::getConsId($setting).self::getSecretKey($setting).self::getTimestamp();
     }
 
-	public static function getSignature()
+	public static function getSignature($setting)
 	{
-		return hash_hmac('sha256', CONS_ID."&".self::getTimestamp(), SECRETKEY, true);
+		return hash_hmac('sha256', self::getConsId($setting)."&".self::getTimestamp(), self::getSecretKey($setting), true);
 	}
 
-    public static function getEncodedSignature()
+    public static function getEncodedSignature($setting)
 	{
-        $signature = self::getSignature();
+        $signature = self::getSignature($setting);
         return base64_encode($signature);
 	}
 
+    public static function getSetting()
+    {
+        $data = DB::table('setting_bridging_bpjs')
+                ->where('id_setting', ID_SETTING)
+                ->where('api_type', API_TYPE)
+                ->where('configuration', CONFIGURATION)
+                ->get();
+        return $data[0];
+    }
+
 	public static function exec($method, $URL, $jsonData='', $return=FALSE, $debug=FALSE)
 	{
-		$URL = self::getUrl().'/'.$URL;
+
+        $setting = self::getSetting();
+
+		$URL = self::getUrl($setting).'/'.$URL;
 
 		$timeStamp = self::getTimestamp();
-		$arrayHeader[0] = "X-cons-id: ".CONS_ID;
+		$arrayHeader[0] = "X-cons-id: ".self::getConsId($setting);
 		$arrayHeader[1] = "X-timestamp:".self::getTimestamp();
-		$arrayHeader[2] = "X-signature: ".self::getEncodedSignature();
-		$arrayHeader[3] = "user_key: ".USERKEY;
+		$arrayHeader[2] = "X-signature: ".self::getEncodedSignature($setting);
+		$arrayHeader[3] = "user_key: ".self::getUserkey($setting);
 
-		$decryptKey = CONS_ID.SECRETKEY.$timeStamp;
+		$decryptKey = self::getConsId($setting).self::getSecretKey($setting).$timeStamp;
 
 		if( strtoupper($method) == 'GET' ){
 			$ch = curl_init();
