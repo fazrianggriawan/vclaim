@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Bridging;
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\VclaimLib;
 use App\Http\Libraries\AntrolLib;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class Referensi extends Controller
 {
-    public function Diagnosa($keyword)
+    public function Diagnosa(Request $request)
     {
-        $url = 'referensi/diagnosa/' . $keyword;
+        $url = 'referensi/diagnosa/' . $request->keyword;
         return VclaimLib::exec('GET', $url);
     }
 
@@ -28,7 +28,7 @@ class Referensi extends Controller
 
     public function Procedure(Request $request)
     {
-        $url = 'referensi/procedure/' . $request->input('key');
+        $url = 'referensi/procedure/' . $request->keyword;
         return VclaimLib::exec('GET', $url);
     }
 

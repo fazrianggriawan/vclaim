@@ -49,11 +49,13 @@ $router->post('suratKontrol/save', 'Bridging\SuratKontrol@SaveRencanaKontrol' );
 $router->get('prb/data/from/{from}/to/{to}', 'Bridging\Prb@DataPrb' );
 
 /* Referensi / Master Data */
-$router->get('referensi/diagnosa/{keyword}', 'Bridging\Referensi@Diagnosa' );
+
 $router->get('referensi/poliklinik/{keyword}', 'Bridging\Referensi@Poliklinik' );
 $router->get('referensi/dokter/jnsPerawatan/{jnsPelayanan}/poliklinik/{poliklinik}', 'Bridging\Referensi@DokterDpjp' );
 $router->get('referensi/faskes/{keyword}', 'Bridging\Referensi@Faskes' );
 $router->get('referensi/jadwalDokter/poli/{kodePoli}/tanggal/{tglKunjungan}', 'Bridging\Referensi@JadwalDokter' );
+$router->post('referensi/procedure', 'Bridging\Referensi@Procedure' );
+$router->post('referensi/diagnosa', 'Bridging\Referensi@Diagnosa' );
 
 /* Print */
 $router->get('sep/print/{nomorSep}', 'Bridging\Cetak\Sep@Index' );
