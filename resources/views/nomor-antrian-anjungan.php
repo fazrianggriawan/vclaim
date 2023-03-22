@@ -11,7 +11,7 @@
 </style>
 <div class="container">
     <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px; text-align: center;">
-        <div>RUMAH SAKIT SALAK - BOGOR</div>
+        <div>RSPAD GATOT SOEBROTO</div>
         <div style="width: 300px; text-align:right; margin-top: -16px;">.</div>
         <?php if( $tipe == 'tni' ){ ?><div>TNI / KELUARGA / PURNAWIRAWAN</div> <?php } ?>
         <?php if( $tipe == 'bpjs' ){ ?><div>BPJS KESEHATAN</div> <?php } ?>
@@ -31,8 +31,8 @@
             <div>Tgl. Cetak : <?php echo date('d-m-Y')?> Jam : <?php echo date('H:i:s') ?></div>
             <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid black;">
                 Lebih Mudah Dengan <br> Registrasi Online <br>
-                www.rssalakbogor.co.id/registrasi
-                <img src="/vclaim/public/qrregistrasi.jpg" style="width: 50%;"/>
+
+                <img src="/vclaim/public/qrregistrasi.png" style="width: 50%;"/>
             </div>
             <div style="text-align: center; margin-top: 20px;">.</div>
         </div>

@@ -55,7 +55,7 @@ class Sep extends Controller
 		// $pdf->Cell($widthCell-5);
 		$pdf->Cell(70, 5,'SURAT ELEGIBILITAS PASIEN', $border);
 		$pdf->Ln(5);
-        $pdf->Cell($widthCellData, 5,'RS SALAK BOGOR', $border);
+        $pdf->Cell($widthCellData, 5,'RSPAD GATOT SOEBROTO', $border);
 		$pdf->Cell($widthCell);
 		$pdf->Cell(70, 5,'', $border);
 

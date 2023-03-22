@@ -5,10 +5,10 @@ return [
     'connections' => [
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST'),
-            'database' => env('DB_DATABASE'),
-            'username' => env('DB_USERNAME'),
-            'password' => env('DB_PASSWORD'),
+            'host' => '101.50.2.213',
+            'database' => 'app_bihealth_online',
+            'username' => 'bihealth',
+            'password' => 'Xsw21q@z',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'strict'    => false

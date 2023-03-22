@@ -2,6 +2,7 @@
 
 namespace App\Http\Libraries;
 
+use Illuminate\Support\Facades\DB;
 use LZCompressor\LZString;
 
 const ID_SETTING 	= 1;
