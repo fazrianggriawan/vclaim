@@ -37,7 +37,7 @@ function dateHuman($date)
 <div class="container">
     <div style="font-size: 16px; font-weight: bold;">
         <div>SURAT ELEGIBILITAS PASIEN</div>
-        <div>RS SALAK</div>
+        <div>RSPAD GATOT SOEBROTO</div>
     </div>
     <table cellpadding="0" cellspacing="1" border="0">
         <tr>

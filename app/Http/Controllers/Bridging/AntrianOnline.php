@@ -8,6 +8,7 @@ use App\Http\Libraries\AntrolLib;
 use App\Http\Libraries\AppLib;
 use DateInterval;
 use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AntrianOnline extends Controller
@@ -320,6 +321,34 @@ class AntrianOnline extends Controller
 		return $time->format('H:i');
 	}
 
-
+    public function SaveToSimrs(Request $request)
+    {
+        try {
+            $data = array(
+                "nama" => $request->pasien['nama'],
+                "noaskes" => $request->pasien[''],
+                "poliklinik" => "UROLOGI",
+                "norm" => $request->pasien['norekmed'],
+                "id_poliklinik" => '',
+                "tanggal" => "2023-03-24",
+                "str_tanggal" => "2023-03-24",
+                "id_pasien" => "10996999",
+                "type" => "BPJS",
+                "rs_id" => 1,
+                "golpas_id" => "004",
+                "kunjunganke" => 0,
+                "surkon" => "",
+                "idDPJP" => "",
+                "no_rujukan" => "",
+                "polisurkon" => "",
+                "token" => "608558",
+                "noantrian" => "B8-11",
+                "type" => "B8",
+                "id_andro_sesi" => ""
+            );
+        } catch (\Throwable $th) {
+            return AppLib::response(201, [], $th->getMessage());
+        }
+    }
 
 }
