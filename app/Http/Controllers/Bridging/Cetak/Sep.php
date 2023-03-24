@@ -169,7 +169,7 @@ class Sep extends Controller
 
     }
 
-    public function PrintSepAnjungan($sep, $kodeBooking)
+    public static function PrintSepAnjungan($sep, $kodeBooking)
     {
         $data = DB::table('antrian')
                 ->where('antrian.booking_code', $kodeBooking)
@@ -186,8 +186,12 @@ class Sep extends Controller
     public function PrintSepOnly($nomorSep)
     {
         $data = json_decode( VclaimLib::exec('GET', 'SEP/'.$nomorSep) );
+
         if( $data->metaData->code == '200' ){
             $rujukan = json_decode( VclaimLib::exec('GET', 'Rujukan/'.$data->response->noRujukan) );
+            if( !isset($rujukan->response->rujukan) ){
+                $rujukan = json_decode( VclaimLib::exec('GET', 'Rujukan/RS/'.$data->response->noRujukan) );
+            }
             return view('sep-anjungan', ['sep'=>$data->response, 'registrasi'=>array(), 'rujukan'=>$rujukan->response->rujukan]);
         }
     }
