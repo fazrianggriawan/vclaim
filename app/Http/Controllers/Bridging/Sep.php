@@ -13,13 +13,13 @@ class Sep extends Controller
     {
         $request = json_decode(file_get_contents("php://input"));
 
-        VclaimLib::getSetting();
+        $setting = VclaimLib::getSetting();
 
         $data['request']['t_sep'] =
             array(
                 'noKartu'        => $request->noKartu,
                 'tglSep'        => date('Y-m-d'),
-                'ppkPelayanan' => VclaimLib::getPPK(),
+                'ppkPelayanan' => VclaimLib::getPPK($setting),
                 'jnsPelayanan' => $request->jnsPelayanan,
                 'klsRawat'        => array(
                     "klsRawatHak"     => $request->hakKelas->kode,
@@ -32,7 +32,7 @@ class Sep extends Controller
                     'asalRujukan' => (isset($request->rujukan->asalFaskes)) ? $request->rujukan->asalFaskes : '1', // 1 = RS, 2 = Puskesmas
                     'tglRujukan'  => (isset($request->rujukan->rujukan->tglKunjungan)) ? $request->rujukan->rujukan->tglKunjungan : '',
                     'noRujukan'   => (isset($request->rujukan->rujukan->noKunjungan)) ? $request->rujukan->rujukan->noKunjungan : '',
-                    'ppkRujukan'  => (isset($request->rujukan->rujukan->provPerujuk)) ? $request->rujukan->rujukan->provPerujuk->kode : VclaimLib::getPPK()
+                    'ppkRujukan'  => (isset($request->rujukan->rujukan->provPerujuk)) ? $request->rujukan->rujukan->provPerujuk->kode : VclaimLib::getPPK($setting)
                 ),
                 'catatan'          => $request->catatan,
                 'diagAwal'          => $request->diagnosa->kode,
