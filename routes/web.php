@@ -76,7 +76,6 @@ $router->get('antrian/byJadwal/{jamPraktek}/{kodePoli}/{tglKunjungan}', 'Bridgin
 $router->get('antrian/dashboard', 'Bridging\AntrianOnline@DashboardAntrian' );
 $router->post('antrian/filterData', 'Bridging\AntrianOnline@FilterData' );
 $router->post('antrian/save', 'Bridging\AntrianOnline@Save' );
-$router->post('antrian/save_to_simrs', 'Bridging\AntrianOnline@SaveToSimrs' );
 $router->post('antrian/save_after_sep', 'Bridging\AntrianOnline@SaveAfterSep' );
 $router->post('antrian/checkin', 'Bridging\AntrianOnline@Checkin' );
 
