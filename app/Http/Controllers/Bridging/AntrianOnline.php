@@ -116,6 +116,7 @@ class AntrianOnline extends Controller
             'rujukan' => json_encode($request->rujukan),
             'suratKontrol' => json_encode($request->suratKontrol),
             'jadwalDokter' => json_encode($request->jadwalDokter),
+            'sesi' => json_encode(@$request->sesi),
             'dateCreated' => date('Y-m-d H:i:s')
         );
 
