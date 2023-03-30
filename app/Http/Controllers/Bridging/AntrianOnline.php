@@ -25,8 +25,6 @@ class AntrianOnline extends Controller
         $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
         $this->SaveAntrianDetail($request, $nomorAntrian);
 
-        DB::commit();
-
         if( !$dataAntrian ){
             return AppLib::response(201, array(), 'Data Gagal Disimpan');
         }
@@ -39,7 +37,7 @@ class AntrianOnline extends Controller
             "nomorkartu" => $dataAntrian['no_kartu_bpjs'],
             "nik" => $dataAntrian['nik'],
             "nohp" => $dataAntrian['hp'],
-            "kodepoli" => $request->jadwalDokter->kodepoli,
+            "kodepoli" => $request->jadwalDokter->kodesubspesialis,
             "namapoli" => $request->jadwalDokter->namapoli,
             "pasienbaru" => 0,
             "norm" => $dataAntrian['norm'],
@@ -70,8 +68,11 @@ class AntrianOnline extends Controller
                 'response' => $data
             );
 
+            DB::commit();
+
             return json_encode($response);
         }else{
+            DB::rollBack();
             return $response;
         }
 	}
