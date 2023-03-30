@@ -2,6 +2,7 @@
 
 namespace App\Http\Modules\Bpjs\Antrol\Controllers;
 
+use App\Http\Modules\Bpjs\Antrol\Classes\DataAntrian;
 use App\Http\Modules\Bpjs\Antrol\Classes\WS_Antrol;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;

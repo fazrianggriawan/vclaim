@@ -88,12 +88,15 @@ class AntrianOnline extends Controller
         $dataPoli = Master::GetPoliklinik($request->jadwalDokter->kodepoli);
         $queryNoAntrian = '(SELECT COALESCE (MAX(aa.no_antrian)+1, 11) AS nomor_antrian FROM antrian AS aa WHERE aa.poli = "'.$request->jadwalDokter->kodepoli.'" AND aa.tgl_kunjungan = "'.$request->jadwalDokter->tglKunjungan.'")';
 
+        $antrian = explode('-',$request->simrs->noantrian);
+
         $dataInsert = array(
-            'booking_code' => $kodeBooking,
+            'booking_code' => $request->simrs->kode_booking,
             'nama' => $request->pasien->nama,
+            'id_pasien' => $request->pasien->id_pasien,
             'tgl_kunjungan' => $request->jadwalDokter->tglKunjungan,
-            'prefix_antrian' => $dataPoli->prefix_antrian,
-            'no_antrian' => DB::raw($queryNoAntrian),
+            'prefix_antrian' => $antrian[0],
+            'no_antrian' => $antrian[1],
             'poli' => $request->jadwalDokter->kodepoli,
             'jns_pasien' => (($request->jenisPembayaran == 'bpjs') ? 'JKN' : 'NON JKN'),
             'no_kartu_bpjs' => $request->pasien->noaskes,
@@ -103,7 +106,8 @@ class AntrianOnline extends Controller
             'jam_praktek' => $request->jadwalDokter->jadwal,
             'kodedokter_bpjs' => $request->jadwalDokter->kodedokter,
             'hp' => (isset($request->rujukan->peserta->mr->noTelepon)) ? $request->rujukan->peserta->mr->noTelepon : '',
-            'nik' => (isset($request->rujukan->peserta->nik)) ? $request->rujukan->peserta->nik : ''
+            'nik' => (isset($request->rujukan->peserta->nik)) ? $request->rujukan->peserta->nik : '',
+            'sesi' => $request->sesi->id,
         );
         $insert = DB::table('antrian')->insert($dataInsert);
         return ( $insert ) ? $dataInsert : FALSE;
@@ -320,36 +324,6 @@ class AntrianOnline extends Controller
 		$time->add(new DateInterval('PT' . $addTime . 'M'));
 		return $time->format('H:i');
 	}
-
-    public function SaveToSimrs(Request $request)
-    {
-        try {
-            $data = array(
-                "nama" => $request->pasien['nama'],
-                "noaskes" => $request->pasien[''],
-                "poliklinik" => "UROLOGI",
-                "norm" => $request->pasien['norekmed'],
-                "id_poliklinik" => '',
-                "tanggal" => "2023-03-24",
-                "str_tanggal" => "2023-03-24",
-                "id_pasien" => "10996999",
-                "type" => "BPJS",
-                "rs_id" => 1,
-                "golpas_id" => "004",
-                "kunjunganke" => 0,
-                "surkon" => "",
-                "idDPJP" => "",
-                "no_rujukan" => "",
-                "polisurkon" => "",
-                "token" => "608558",
-                "noantrian" => "B8-11",
-                "type" => "B8",
-                "id_andro_sesi" => ""
-            );
-        } catch (\Throwable $th) {
-            return AppLib::response(201, [], $th->getMessage());
-        }
-    }
 
     public function SaveAfterSep(Request $request)
     {
