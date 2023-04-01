@@ -121,6 +121,7 @@ $app->router->group([
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
     require __DIR__.'/../routes/Antrol_Route.php';
+    require __DIR__.'/../routes/Anjungan_Route.php';
 });
 
 return $app;

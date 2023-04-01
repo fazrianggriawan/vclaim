@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) { return; });
 
 /* Sep */
 $router->get('sep/nomorSep/{nomorSep}', 'Bridging\Sep@GetByNomorSep' );
+$router->get('sep/fingerprint/{nomor_kartu}/{tanggal}', 'Bridging\Sep@FingerPrint' );
 $router->post('sep/save', 'Bridging\Sep@Save' );
 $router->post('sep/delete', 'Bridging\Sep@Delete' );
 $router->post('sep/deleteSepInternal', 'Bridging\Sep@DeleteSepInternal' );

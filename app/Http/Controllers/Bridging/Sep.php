@@ -157,10 +157,10 @@ class Sep extends Controller
         return VclaimLib::exec('PUT', 'SEP/2.0/updtglplg', json_encode($data));
     }
 
-    public function GetFingerPrint($noKartu, $tanggal)
+    public function FingerPrint($nomor_kartu, $tanggal)
     {
-        // $url = 'SEP/FingerPrint/Peserta/'.$noKartu.'/TglPelayanan/'.$tanggal;
-        // return VclaimLib::exec('GET', $url);
+        $url = 'SEP/FingerPrint/Peserta/'.$nomor_kartu.'/TglPelayanan/'.$tanggal;
+        return VclaimLib::exec('GET', $url);
     }
 
 }
