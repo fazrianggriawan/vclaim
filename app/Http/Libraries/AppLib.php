@@ -13,4 +13,10 @@ class AppLib
         );
         return \json_encode($array);
     }
+
+    public static function dateHuman($tanggal)
+    {
+        $array = explode('-', $tanggal);
+        return $array[2].'-'.$array[1].'-'.$array[0];
+    }
 }

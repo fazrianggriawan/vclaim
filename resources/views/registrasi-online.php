@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Libraries\AppLib;
+
 function dataKelasRawat($var = null)
 {
     $data = array(
@@ -31,7 +34,7 @@ function dataKelasRawat($var = null)
 </style>
 <div class="container">
     <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">
-        <div>DATA REGISTRASI ONLINE</div>
+        <div>TIKET REGISTRASI</div>
     </div>
     <table cellpadding="0" cellspacing="1" border="0">
         <tr>
@@ -40,14 +43,14 @@ function dataKelasRawat($var = null)
             <td width="200"><?= $registrasi->booking_code ?></td>
         </tr>
         <tr>
+            <td>No.Antrian</td>
+            <td>:</td>
+            <td><?= $registrasi->prefix_antrian ?>-<?= $registrasi->no_antrian ?></td>
+        </tr>
+        <tr>
             <td>Tanggal</td>
             <td>:</td>
             <td><?= $jadwalDokter->tglKunjungan ?></td>
-        </tr>
-        <tr>
-            <td>No.RM</td>
-            <td>:</td>
-            <td><?= substr($pasien->norekmed, -6) ?></td>
         </tr>
         <tr>
             <td>Nama</td>
@@ -55,19 +58,34 @@ function dataKelasRawat($var = null)
             <td><?= $pasien->nama ?></td>
         </tr>
         <tr>
+            <td>No.RM</td>
+            <td>:</td>
+            <td><?= $pasien->norekmed ?></td>
+        </tr>
+        <tr>
             <td>No.BPJS</td>
             <td>:</td>
             <td><?= $pasien->noaskes ?></td>
         </tr>
         <tr>
+            <td>No.Rujukan</td>
+            <td>:</td>
+            <td><?= $rujukan->noKunjungan ?></td>
+        </tr>
+        <tr>
             <td>Poliklinik</td>
             <td>:</td>
-            <td><?= $jadwalDokter->namapoli ?></td>
+            <td><?= $jadwalDokter->namasubspesialis ?></td>
         </tr>
         <tr>
             <td>Dokter</td>
             <td>:</td>
             <td><?= $jadwalDokter->namadokter ?></td>
+        </tr>
+        <tr>
+            <td>Jam Praktek</td>
+            <td>:</td>
+            <td><?= AppLib::dateHuman($jadwalDokter->jadwal) ?></td>
         </tr>
     </table>
     <div style="width: 320px; text-align: right;">.</div>

@@ -202,10 +202,18 @@ class Sep extends Controller
         $data = DB::table('antrian')
                 ->where('antrian.booking_code', $kodeBooking)
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
-                ->get();
+                ->first();
+
+        $sep = DB::table('antrian_detail_sep')->where('booking_code', $kodeBooking)->first();
 
         if( count($data) > 0 ){
-            return view('registrasi-online', ['registrasi'=>$data[0], 'pasien'=>json_decode($data[0]->pasien), 'jadwalDokter'=>json_decode($data[0]->jadwalDokter) ]);
+            return view('registrasi-online', [
+                            'registrasi' => $data,
+                            'pasien' => json_decode($data->pasien),
+                            'rujukan' => json_decode($data->rujukan),
+                            'jadwalDokter' => json_decode($data->jadwalDokter),
+                            'sep' => $sep
+                        ]);
         }else{
             return '';
         }
