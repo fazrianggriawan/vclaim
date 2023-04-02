@@ -109,6 +109,7 @@ class AntrianOnline extends Controller
             'hp' => (isset($request->rujukan->peserta->mr->noTelepon)) ? $request->rujukan->peserta->mr->noTelepon : '',
             'nik' => (isset($request->rujukan->peserta->nik)) ? $request->rujukan->peserta->nik : '',
             'sesi' => $request->sesi->id,
+            'created_at' => date('Y-m-d H:i:s'),
         );
         $insert = DB::table('antrian')->insert($dataInsert);
         return ( $insert ) ? $dataInsert : FALSE;
