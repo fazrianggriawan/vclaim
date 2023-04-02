@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Libraries\PDFBarcode;
 use App\Http\Libraries\VclaimLib;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class Sep extends Controller
 {
@@ -199,23 +200,25 @@ class Sep extends Controller
 
     public function DataBooking($kodeBooking)
     {
-        $data = DB::table('antrian')
+        try {
+            $data = DB::table('antrian')
                 ->where('antrian.booking_code', $kodeBooking)
                 ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
                 ->first();
 
-        $sep = DB::table('antrian_detail_sep')->where('booking_code', $kodeBooking)->first();
+            $sep = DB::table('antrian_detail_sep')->where('booking_code', $kodeBooking)->first();
 
-        if( count($data) > 0 ){
-            return view('registrasi-online', [
-                            'registrasi' => $data,
-                            'pasien' => json_decode($data->pasien),
-                            'rujukan' => json_decode($data->rujukan),
-                            'jadwalDokter' => json_decode($data->jadwalDokter),
-                            'sep' => $sep
-                        ]);
-        }else{
-            return '';
+            if( $data ){
+                return view('registrasi-online', [
+                                'registrasi' => $data,
+                                'pasien' => json_decode($data->pasien),
+                                'rujukan' => json_decode($data->rujukan),
+                                'jadwalDokter' => json_decode($data->jadwalDokter),
+                                'sep' => $sep
+                            ]);
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
         }
 
     }
