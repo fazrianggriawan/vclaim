@@ -101,7 +101,7 @@ class AntrianOnline extends Controller
             'poli' => $request->jadwalDokter->kodepoli,
             'jns_pasien' => (($request->jenisPembayaran == 'bpjs') ? 'JKN' : 'NON JKN'),
             'no_kartu_bpjs' => $request->pasien->noaskes,
-            'norm' => substr($request->pasien->norekmed, -6),
+            'norm' => $request->pasien->norekmed,
             'no_referensi' => (isset($request->rujukan->noKunjungan)) ? $request->rujukan->noKunjungan : '',
             'jns_kunjungan' => $request->jenisKunjungan->kode,
             'jam_praktek' => $request->jadwalDokter->jadwal,
