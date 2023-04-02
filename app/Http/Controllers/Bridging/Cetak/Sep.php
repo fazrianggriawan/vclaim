@@ -7,8 +7,9 @@ use App\Http\Controllers\Bridging\Rujukan;
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\PDFBarcode;
 use App\Http\Libraries\VclaimLib;
+use App\Models\Antrian;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\TryCatch;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Sep extends Controller
 {
@@ -201,17 +202,17 @@ class Sep extends Controller
     public function DataBooking($kodeBooking)
     {
         try {
-            $data = DB::table('antrian')
-                ->where('antrian.booking_code', $kodeBooking)
-                ->leftJoin('antrian_detail', 'antrian_detail.idAntrian', '=', 'antrian.id')
-                ->first();
+            $data = Antrian::with(['antrian_detail'])->where('booking_code', $kodeBooking)->first();
 
             if( $data ){
                 return view('registrasi-online', [
                                 'registrasi' => $data,
-                                'pasien' => json_decode($data->pasien),
-                                'rujukan' => json_decode($data->rujukan),
-                                'jadwalDokter' => json_decode($data->jadwalDokter)
+                                'kodeBooking' => $kodeBooking,
+                                'pasien' => json_decode($data->antrian_detail->pasien),
+                                'rujukan' => json_decode($data->antrian_detail->rujukan),
+                                'jadwalDokter' => json_decode($data->antrian_detail->jadwalDokter),
+                                'sep' => json_decode($data->antrian_detail->sep),
+                                'qrcode' => QrCode::size(150)->backgroundColor(255, 255, 0, 25)->generate($kodeBooking)
                             ]);
             }
         } catch (\Throwable $th) {

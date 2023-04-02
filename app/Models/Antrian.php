@@ -9,6 +9,17 @@ class Antrian extends Model
 {
     protected $table = 'antrian';
     protected $primaryKey = 'id';
+    protected $connection   = 'mysql_online';
+
+    public function antrian_detail()
+    {
+        return $this->hasOne(Antrian_Detail::class, 'idAntrian', 'id');
+    }
+
+    public function antrian_detail_sep()
+    {
+        return $this->hasOne(Antrian_Detail::class, 'idAntrian', 'id');
+    }
 
     public static function SaveAntrian($registrasi, $post)
 	{

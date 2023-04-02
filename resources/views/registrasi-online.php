@@ -19,7 +19,7 @@ function dataKelasRawat($var = null)
 <style>
     .container {
         position: fixed;
-        width: 100%;
+        width: 270px;
         height: 100%;
         top: 0px;
         left: 0px;
@@ -33,62 +33,71 @@ function dataKelasRawat($var = null)
     }
 </style>
 <div class="container">
-    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">
-        <div>TIKET REGISTRASI</div>
+    <div style="font-size: 18px; font-weight: bold; margin-bottom: 5px; text-align: center">
+        <div>RSPAD GATOT SOEBROTO</div>
+        <div style="margin-top: 5px;">TIKET REGISTRASI</div>
     </div>
-    <table cellpadding="0" cellspacing="1" border="0">
-        <tr>
-            <td width="100">Kode Booking</td>
-            <td width="10">:</td>
-            <td width="200"><?= $registrasi->booking_code ?></td>
-        </tr>
-        <tr>
-            <td>No.Antrian</td>
-            <td>:</td>
-            <td><?= $registrasi->prefix_antrian ?>-<?= $registrasi->no_antrian ?></td>
-        </tr>
+    <hr>
+    <div style="text-align: center;">
+        <div style="font-size: 16px; padding: 5px;">
+            ANTRIAN POLIKLINIK
+            <div><?= strtoupper($jadwalDokter->namasubspesialis) ?></div>
+        </div>
+        <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px; margin-top: 5px;"><?= $registrasi->prefix_antrian ?>-<?= $registrasi->no_antrian ?></div>
+        <hr>
+        <div><?= $qrcode ?></div>
+        <div style="font-size: 16px; padding: 10px;">KODE BOOKING</div>
+        <div style="font-size: 18px; font-weight: bold;"><?= $kodeBooking ?></div>
+    </div>
+    <hr>
+    <table cellpadding="0" cellspacing="1" border="0" style="font-size: 14px;">
         <tr>
             <td>Tanggal</td>
-            <td>:</td>
-            <td><?= $jadwalDokter->tglKunjungan ?></td>
+            <td width="10" style="text-align: center;">:</td>
+            <td><?= AppLib::dateHuman($jadwalDokter->tglKunjungan) ?></td>
         </tr>
         <tr>
             <td>Nama</td>
-            <td>:</td>
+            <td style="text-align: center;">:</td>
             <td><?= $pasien->nama ?></td>
         </tr>
         <tr>
-            <td>No.RM</td>
-            <td>:</td>
+            <td>No. RM</td>
+            <td style="text-align: center;">:</td>
             <td><?= $pasien->norekmed ?></td>
         </tr>
         <tr>
-            <td>No.BPJS</td>
-            <td>:</td>
+            <td>No. BPJS</td>
+            <td style="text-align: center;">:</td>
             <td><?= $pasien->noaskes ?></td>
         </tr>
         <tr>
-            <td>No.Rujukan</td>
-            <td>:</td>
+            <td>No. Rujukan</td>
+            <td style="text-align: center;">:</td>
             <td><?= $rujukan->noKunjungan ?></td>
         </tr>
         <tr>
+            <td>No. SEP</td>
+            <td style="text-align: center;">:</td>
+            <td><?= (isset($sep->noSep)) ? $sep->noSep : '-' ?></td>
+        </tr>
+        <tr>
             <td>Poliklinik</td>
-            <td>:</td>
-            <td><?= $jadwalDokter->namasubspesialis ?></td>
+            <td style="text-align: center;">:</td>
+            <td><?= strtoupper($jadwalDokter->namasubspesialis) ?></td>
         </tr>
         <tr>
             <td>Dokter</td>
-            <td>:</td>
+            <td style="text-align: center;">:</td>
             <td><?= $jadwalDokter->namadokter ?></td>
         </tr>
         <tr>
-            <td>Jam Praktek</td>
-            <td>:</td>
-            <td><?= AppLib::dateHuman($jadwalDokter->jadwal) ?></td>
+            <td>Jadwal Praktek</td>
+            <td style="text-align: center;">:</td>
+            <td><?= $jadwalDokter->jadwal ?></td>
         </tr>
     </table>
-    <div style="width: 320px; text-align: right;">.</div>
+    <div style="width: 300px; text-align: right;">.</div>
 </div>
 
 <script>

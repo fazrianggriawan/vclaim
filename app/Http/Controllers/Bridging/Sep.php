@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Bridging;
 
 use App\Http\Controllers\Controller;
 use App\Http\Libraries\VclaimLib;
+use App\Models\Antrian;
+use App\Models\Antrian_Detail;
 use Illuminate\Support\Facades\DB;
 
 class Sep extends Controller
@@ -78,28 +80,22 @@ class Sep extends Controller
 
         $response = VclaimLib::exec('POST', 'SEP/2.0/insert', json_encode($data));
 
-        if( isset($request->kodeBooking) ){
-            $this->saveSepRegistrasi($request->kodeBooking, $response, $request);
-        }
+        $this->saveSepRegistrasi($request->kode_booking, $response);
 
         return $response;
     }
 
-    public function SaveSepRegistrasi($kodeBooking, $response, $request)
+    public function SaveSepRegistrasi($kodeBooking, $response)
     {
-        if( isset($kodeBooking) ){
-            $res = json_decode($response);
-            if( $res->metaData->code == '200' ){
-                $sep = $res->metaData->response->sep;
-                if( strlen($sep->noSep) > 12 ){
-                    $insertData = array(
-                        'booking_code' => $kodeBooking,
-                        'nomor' => $sep->noSep,
-                        'no_bpjs' => $request->noKartu,
-                        'sep' => json_encode($sep),
-                        'dateCreated' => date('Y-m-d H:i:s')
-                    );
-                    DB::table('antrian_detail_sep')->insert($insertData);
+        $res = json_decode($response);
+        if( $res->metaData->code == '200' ){
+            $sep = $res->response->sep;
+            if( strlen($sep->noSep) > 12 ){
+                $antrian = Antrian::where('booking_code', $kodeBooking)->first();
+                if( $antrian ){
+                    $antrian_detail = Antrian_Detail::where('idAntrian', $antrian->id)->first();
+                    $antrian_detail->sep = json_encode($sep);
+                    $antrian_detail->save();
                 }
             }
         }
