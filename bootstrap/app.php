@@ -39,7 +39,6 @@ $app->withEloquent();
 */
 
 $app->register(Illuminate\Mail\MailServiceProvider::class);
-$app->register(SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class);
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
@@ -70,8 +69,6 @@ $app->configure('mail');
 $app->alias('mailer', Illuminate\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
 $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
-$app->alias('QrCode', SimpleSoftwareIO\QrCode\Facades\QrCode::class);
-
 
 /*
 |--------------------------------------------------------------------------

@@ -45,7 +45,7 @@ function dataKelasRawat($var = null)
         </div>
         <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px; margin-top: 5px;"><?= $registrasi->prefix_antrian ?>-<?= $registrasi->no_antrian ?></div>
         <hr>
-        <div><?= $qrcode ?></div>
+        <div style="text-align: center;"><?= $barcode ?></div>
         <div style="font-size: 16px; padding: 10px;">KODE BOOKING</div>
         <div style="font-size: 18px; font-weight: bold;"><?= $kodeBooking ?></div>
     </div>

@@ -10,6 +10,7 @@ use App\Http\Libraries\VclaimLib;
 use App\Models\Antrian;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Milon\Barcode\DNS1D;
 
 class Sep extends Controller
 {
@@ -204,6 +205,8 @@ class Sep extends Controller
         try {
             $data = Antrian::with(['antrian_detail'])->where('booking_code', $kodeBooking)->first();
 
+            $barcode = new DNS1D;
+
             if( $data ){
                 return view('registrasi-online', [
                                 'registrasi' => $data,
@@ -212,7 +215,8 @@ class Sep extends Controller
                                 'rujukan' => json_decode($data->antrian_detail->rujukan),
                                 'jadwalDokter' => json_decode($data->antrian_detail->jadwalDokter),
                                 'sep' => json_decode($data->antrian_detail->sep),
-                                'qrcode' => QrCode::size(150)->backgroundColor(255, 255, 0, 25)->generate($kodeBooking)
+                                'qrcode' => QrCode::size(150)->backgroundColor(255, 255, 0, 25)->generate($kodeBooking),
+                                'barcode' => $barcode->getBarcodeSVG('4445645656', 'PHARMA', 2, 50, 'black', false)
                             ]);
             }
         } catch (\Throwable $th) {
