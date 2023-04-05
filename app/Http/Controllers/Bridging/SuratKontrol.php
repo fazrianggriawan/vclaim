@@ -68,15 +68,6 @@ class SuratKontrol extends Controller
 
         $noSuratKontrol = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->noSuratKontrol : '';
 
-        // $insert = array(
-        //     'noSuratKontrol' => $noSuratKontrol,
-        //     'request' => json_encode($data),
-        //     'response' => $response,
-        //     'response_code' => $dataResponse->metaData->code,
-        // );
-
-        // DB::table('vclaim_surat_kontrol')->insert($insert);
-
         return $response;
     }
 
@@ -84,30 +75,15 @@ class SuratKontrol extends Controller
     {
         $post = json_decode(file_get_contents("php://input"));
 
-        $tgl = new \DateTime($post->tgl);
-
         $data["request"] = array(
             "noSEP" => $post->noSep,
             "kodeDokter" => $post->dokter,
             "poliKontrol" => $post->poli,
-            "tglRencanaKontrol" => $post->tanggal,
+            "tglRencanaKontrol" => $post->tgl,
             "user" => 'Vclaim'
         );
 
         $response = VclaimLib::exec('PUT', 'RencanaKontrol/update', json_encode($data));
-
-        $dataResponse = json_decode($response);
-
-        $noSuratKontrol = ( $dataResponse->metaData->code == '200' ) ? $dataResponse->response->noSuratKontrol : '';
-
-        // $insert = array(
-        //     'noSuratKontrol' => $noSuratKontrol,
-        //     'request' => json_encode($data),
-        //     'response' => $response,
-        //     'response_code' => $dataResponse->metaData->code,
-        // );
-
-        // DB::table('vclaim_surat_kontrol')->insert($insert);
 
         return $response;
     }
