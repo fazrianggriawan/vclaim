@@ -45,6 +45,7 @@ $router->get('suratKontrol/byPeserta/nomorKartu/{nomorKartu}/bulan/{bulan}/filte
 $router->get('suratKontrol/delete/noSuratKontrol/{noSuratKontrol}', 'Bridging\SuratKontrol@Delete' );
 $router->get('suratKontrol/bySep/{noSep}', 'Bridging\SuratKontrol@BySep' );
 $router->post('suratKontrol/save', 'Bridging\SuratKontrol@SaveRencanaKontrol' );
+$router->post('suratKontrol/update', 'Bridging\SuratKontrol@UpdateRencanaKontrol' );
 
 /* PRB */
 $router->get('prb/data/from/{from}/to/{to}', 'Bridging\Prb@DataPrb' );

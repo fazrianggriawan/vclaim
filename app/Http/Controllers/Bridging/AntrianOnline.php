@@ -16,64 +16,68 @@ class AntrianOnline extends Controller
 
     public function Save()
 	{
-        $request = json_decode(file_get_contents("php://input"));
+        try {
+            $request = json_decode(file_get_contents("php://input"));
 
-        DB::beginTransaction();
+            DB::beginTransaction();
 
-        $dataAntrian = $this->SaveAntrian($request);
+            $dataAntrian = $this->SaveAntrian($request);
 
-        $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
-        $this->SaveAntrianDetail($request, $nomorAntrian);
+            $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
+            $this->SaveAntrianDetail($request, $nomorAntrian);
 
-        if( !$dataAntrian ){
-            return AppLib::response(201, array(), 'Data Gagal Disimpan');
-        }
+            if( !$dataAntrian ){
+                return AppLib::response(201, array(), 'Data Gagal Disimpan');
+            }
 
-        $totalKuota = 80;
+            $totalKuota = 80;
 
-        $data = array(
-            "kodebooking" => $dataAntrian['booking_code'],
-            "jenispasien" => $dataAntrian['jns_pasien'],
-            "nomorkartu" => $dataAntrian['no_kartu_bpjs'],
-            "nik" => $dataAntrian['nik'],
-            "nohp" => $dataAntrian['hp'],
-            "kodepoli" => $request->jadwalDokter->kodesubspesialis,
-            "namapoli" => $request->jadwalDokter->namapoli,
-            "pasienbaru" => 0,
-            "norm" => $dataAntrian['norm'],
-            "tanggalperiksa" => $dataAntrian['tgl_kunjungan'],
-            "kodedokter" => $dataAntrian['kodedokter_bpjs'],
-            "namadokter" => $request->jadwalDokter->namadokter,
-            "jampraktek" => $dataAntrian['jam_praktek'],
-            "jeniskunjungan" => $dataAntrian['jns_kunjungan'],
-            "nomorreferensi" => $dataAntrian['no_referensi'],
-            "nomorantrean" => $dataAntrian['prefix_antrian'].'-'.$nomorAntrian[0]->no_antrian,
-            "angkaantrean" => $nomorAntrian[0]->no_antrian,
-            "estimasidilayani" => $this->EstimasiWaktuDilayani($dataAntrian['jam_praktek'], $nomorAntrian[0]->no_antrian, $dataAntrian['tgl_kunjungan']),
-            "sisakuotajkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
-            "kuotajkn" => $totalKuota,
-            "sisakuotanonjkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
-            "kuotanonjkn" => $totalKuota,
-            "keterangan" => "Peserta harap 30 menit lebih awal guna pencatatan administrasi."
-        );
-
-		$url = 'antrean/add';
-        $response = AntrolLib::exec('POST', $url, json_encode($data));
-
-        $dataResponse = json_decode($response);
-
-        if( $dataResponse->metadata->code == 200 ){
-            $response = array(
-                'metadata' => array('code'=>200, 'message'=>'Ok'),
-                'response' => $data
+            $data = array(
+                "kodebooking" => $dataAntrian['booking_code'],
+                "jenispasien" => $dataAntrian['jns_pasien'],
+                "nomorkartu" => $dataAntrian['no_kartu_bpjs'],
+                "nik" => $dataAntrian['nik'],
+                "nohp" => $dataAntrian['hp'],
+                "kodepoli" => $request->jadwalDokter->kodesubspesialis,
+                "namapoli" => $request->jadwalDokter->namapoli,
+                "pasienbaru" => 0,
+                "norm" => $dataAntrian['norm'],
+                "tanggalperiksa" => $dataAntrian['tgl_kunjungan'],
+                "kodedokter" => $dataAntrian['kodedokter_bpjs'],
+                "namadokter" => $request->jadwalDokter->namadokter,
+                "jampraktek" => $dataAntrian['jam_praktek'],
+                "jeniskunjungan" => $dataAntrian['jns_kunjungan'],
+                "nomorreferensi" => $dataAntrian['no_referensi'],
+                "nomorantrean" => $dataAntrian['prefix_antrian'].'-'.$nomorAntrian[0]->no_antrian,
+                "angkaantrean" => $nomorAntrian[0]->no_antrian,
+                "estimasidilayani" => $this->EstimasiWaktuDilayani($dataAntrian['jam_praktek'], $nomorAntrian[0]->no_antrian, $dataAntrian['tgl_kunjungan']),
+                "sisakuotajkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
+                "kuotajkn" => $totalKuota,
+                "sisakuotanonjkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
+                "kuotanonjkn" => $totalKuota,
+                "keterangan" => "Peserta harap 30 menit lebih awal guna pencatatan administrasi."
             );
 
-            DB::commit();
+            $url = 'antrean/add';
+            $response = AntrolLib::exec('POST', $url, json_encode($data));
 
-            return json_encode($response);
-        }else{
-            DB::rollBack();
-            return $response;
+            $dataResponse = json_decode($response);
+
+            if( $dataResponse->metadata->code == 200 ){
+                $response = array(
+                    'metadata' => array('code'=>200, 'message'=>'Ok'),
+                    'response' => $data
+                );
+
+                DB::commit();
+
+                return json_encode($response);
+            }else{
+                DB::rollBack();
+                return $response;
+            }
+        } catch (\Throwable $th) {
+            return $th->getMessage();
         }
 	}
 
