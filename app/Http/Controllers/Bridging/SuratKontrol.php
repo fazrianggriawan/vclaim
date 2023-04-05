@@ -76,6 +76,7 @@ class SuratKontrol extends Controller
         $post = json_decode(file_get_contents("php://input"));
 
         $data["request"] = array(
+            "noSuratKontrol" => $post->noSuratKontrol,
             "noSEP" => $post->noSep,
             "kodeDokter" => $post->dokter,
             "poliKontrol" => $post->poli,
