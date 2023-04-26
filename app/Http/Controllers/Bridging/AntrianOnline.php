@@ -32,6 +32,14 @@ class AntrianOnline extends Controller
 
             $totalKuota = 80;
 
+            $jenisKunjungan = $dataAntrian['jns_kunjungan'];
+
+            if( $dataAntrian['jns_kunjungan'] == 1 ){
+                if( $request->rujukan->asalFaskes->kode == '2' ){
+                    $jenisKunjungan = 4;
+                }
+            }
+
             $data = array(
                 "kodebooking" => $dataAntrian['booking_code'],
                 "jenispasien" => $dataAntrian['jns_pasien'],
@@ -46,7 +54,7 @@ class AntrianOnline extends Controller
                 "kodedokter" => $dataAntrian['kodedokter_bpjs'],
                 "namadokter" => $request->jadwalDokter->namadokter,
                 "jampraktek" => $dataAntrian['jam_praktek'],
-                "jeniskunjungan" => $dataAntrian['jns_kunjungan'],
+                "jeniskunjungan" => $jenisKunjungan,
                 "nomorreferensi" => $dataAntrian['no_referensi'],
                 "nomorantrean" => $dataAntrian['prefix_antrian'].'-'.$nomorAntrian[0]->no_antrian,
                 "angkaantrean" => $nomorAntrian[0]->no_antrian,
