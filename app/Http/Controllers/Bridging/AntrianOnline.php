@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Master;
 use App\Http\Libraries\AntrolLib;
 use App\Http\Libraries\AppLib;
+use App\Models\Antrian;
+use App\Models\PoliBpjs;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -14,105 +16,111 @@ use Illuminate\Support\Facades\DB;
 class AntrianOnline extends Controller
 {
 
-    public function Save()
+    public function Save(Request $request)
 	{
-        $request = json_decode(file_get_contents("php://input"));
-
         DB::beginTransaction();
 
-        $dataAntrian = $this->SaveAntrian($request);
-
-        $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
-        $this->SaveAntrianDetail($request, $nomorAntrian);
-
-        if( !$dataAntrian ){
-            return AppLib::response(201, array(), 'Data Gagal Disimpan');
-        }
-
-        $totalKuota = 80;
-
-        $data = array(
-            "kodebooking" => $dataAntrian['booking_code'],
-            "jenispasien" => $dataAntrian['jns_pasien'],
-            "nomorkartu" => $dataAntrian['no_kartu_bpjs'],
-            "nik" => $dataAntrian['nik'],
-            "nohp" => $dataAntrian['hp'],
-            "kodepoli" => $request->jadwalDokter->kodesubspesialis,
-            "namapoli" => $request->jadwalDokter->namapoli,
-            "pasienbaru" => 0,
-            "norm" => $dataAntrian['norm'],
-            "tanggalperiksa" => $dataAntrian['tgl_kunjungan'],
-            "kodedokter" => $dataAntrian['kodedokter_bpjs'],
-            "namadokter" => $request->jadwalDokter->namadokter,
-            "jampraktek" => $dataAntrian['jam_praktek'],
-            "jeniskunjungan" => $dataAntrian['jns_kunjungan'],
-            "nomorreferensi" => $dataAntrian['no_referensi'],
-            "nomorantrean" => $dataAntrian['prefix_antrian'].'-'.$nomorAntrian[0]->no_antrian,
-            "angkaantrean" => $nomorAntrian[0]->no_antrian,
-            "estimasidilayani" => $this->EstimasiWaktuDilayani($dataAntrian['jam_praktek'], $nomorAntrian[0]->no_antrian, $dataAntrian['tgl_kunjungan']),
-            "sisakuotajkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
-            "kuotajkn" => $totalKuota,
-            "sisakuotanonjkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
-            "kuotanonjkn" => $totalKuota,
-            "keterangan" => "Peserta harap 30 menit lebih awal guna pencatatan administrasi."
-        );
-
-		$url = 'antrean/add';
-        $response = AntrolLib::exec('POST', $url, json_encode($data));
-
-        $dataResponse = json_decode($response);
-
-        if( $dataResponse->metadata->code == 200 ){
-            $response = array(
-                'metadata' => array('code'=>200, 'message'=>'Ok'),
-                'response' => $data
-            );
-
+        try {
+            $antrian = self::SaveAntrian($request);
             DB::commit();
-
-            return json_encode($response);
-        }else{
+            return AppLib::response(200, $antrian);
+        } catch (\Throwable $th) {
             DB::rollBack();
-            return $response;
+            return AppLib::response(201, [], $th->getMessage().' '.$th->getFile().' Line: '.$th->getLine());
+            //throw $th;
         }
+
+        // $nomorAntrian = DB::table('antrian')->where('booking_code', $dataAntrian['booking_code'])->get();
+        // $this->SaveAntrianDetail($request, $nomorAntrian);
+
+        // if( !$dataAntrian ){
+        //     return AppLib::response(201, array(), 'Data Gagal Disimpan');
+        // }
+
+        // $totalKuota = 80;
+
+        // $data = array(
+        //     "kodebooking" => $dataAntrian['booking_code'],
+        //     "jenispasien" => $dataAntrian['jns_pasien'],
+        //     "nomorkartu" => $dataAntrian['no_kartu_bpjs'],
+        //     "nik" => $dataAntrian['nik'],
+        //     "nohp" => $dataAntrian['hp'],
+        //     "kodepoli" => $request->jadwalDokter->kodesubspesialis,
+        //     "namapoli" => $request->jadwalDokter->namapoli,
+        //     "pasienbaru" => 0,
+        //     "norm" => $dataAntrian['norm'],
+        //     "tanggalperiksa" => $dataAntrian['tgl_kunjungan'],
+        //     "kodedokter" => $dataAntrian['kodedokter_bpjs'],
+        //     "namadokter" => $request->jadwalDokter->namadokter,
+        //     "jampraktek" => $dataAntrian['jam_praktek'],
+        //     "jeniskunjungan" => $dataAntrian['jns_kunjungan'],
+        //     "nomorreferensi" => $dataAntrian['no_referensi'],
+        //     "nomorantrean" => $dataAntrian['prefix_antrian'].'-'.$nomorAntrian[0]->no_antrian,
+        //     "angkaantrean" => $nomorAntrian[0]->no_antrian,
+        //     "estimasidilayani" => $this->EstimasiWaktuDilayani($dataAntrian['jam_praktek'], $nomorAntrian[0]->no_antrian, $dataAntrian['tgl_kunjungan']),
+        //     "sisakuotajkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
+        //     "kuotajkn" => $totalKuota,
+        //     "sisakuotanonjkn" => ($totalKuota - $nomorAntrian[0]->no_antrian),
+        //     "kuotanonjkn" => $totalKuota,
+        //     "keterangan" => "Peserta harap 30 menit lebih awal guna pencatatan administrasi."
+        // );
+
+		// $url = 'antrean/add';
+        // $response = AntrolLib::exec('POST', $url, json_encode($data));
+
+        // $dataResponse = json_decode($response);
+
+        // if( $dataResponse->metadata->code == 200 ){
+        //     $response = array(
+        //         'metadata' => array('code'=>200, 'message'=>'Ok'),
+        //         'response' => $data
+        //     );
+
+        //     DB::commit();
+
+        //     return json_encode($response);
+        // }else{
+        //     DB::rollBack();
+        //     return $response;
+        // }
 	}
 
-    private function GenerateKodeBooking()
+    public static function GenerateKodeBooking()
     {
         $bytes = random_bytes(3);
         return strtoupper(bin2hex($bytes));
     }
 
-    private function SaveAntrian($request)
+    public static function SaveAntrian($request)
     {
-        $kodeBooking = $this->GenerateKodeBooking();
-        $dataPoli = Master::GetPoliklinik($request->jadwalDokter->kodepoli);
+        $kodeBooking = self::GenerateKodeBooking();
+        $poliklinik  = PoliBpjs::where('kode', $request->jadwalDokter->kodepoli)->first();
         $queryNoAntrian = '(SELECT COALESCE (MAX(aa.no_antrian)+1, 11) AS nomor_antrian FROM antrian AS aa WHERE aa.poli = "'.$request->jadwalDokter->kodepoli.'" AND aa.tgl_kunjungan = "'.$request->jadwalDokter->tglKunjungan.'")';
 
-        $antrian = explode('-',$request->simrs->noantrian);
+        $antrian = new Antrian();
 
-        $dataInsert = array(
-            'booking_code' => $request->simrs->kode_booking,
-            'nama' => $request->pasien->nama,
-            'id_pasien' => $request->pasien->id_pasien,
-            'tgl_kunjungan' => $request->jadwalDokter->tglKunjungan,
-            'prefix_antrian' => $antrian[0],
-            'no_antrian' => $antrian[1],
-            'poli' => $request->jadwalDokter->kodepoli,
-            'jns_pasien' => (($request->jenisPembayaran == 'bpjs') ? 'JKN' : 'NON JKN'),
-            'no_kartu_bpjs' => $request->pasien->noaskes,
-            'norm' => $request->pasien->norekmed,
-            'no_referensi' => (isset($request->rujukan->noKunjungan)) ? $request->rujukan->noKunjungan : '',
-            'jns_kunjungan' => $request->jenisKunjungan->kode,
-            'jam_praktek' => $request->jadwalDokter->jadwal,
-            'kodedokter_bpjs' => $request->jadwalDokter->kodedokter,
-            'hp' => (isset($request->rujukan->peserta->mr->noTelepon)) ? $request->rujukan->peserta->mr->noTelepon : '',
-            'nik' => (isset($request->rujukan->peserta->nik)) ? $request->rujukan->peserta->nik : '',
-            'sesi' => $request->sesi->id,
-            'created_at' => date('Y-m-d H:i:s'),
-        );
-        $insert = DB::table('antrian')->insert($dataInsert);
-        return ( $insert ) ? $dataInsert : FALSE;
+        $antrian->booking_code =  $kodeBooking;
+        $antrian->nama =  $request->pasien->nama;
+        $antrian->id_pasien =  $request->pasien->id_pasien;
+        $antrian->tgl_kunjungan =  $request->jadwalDokter->tglKunjungan;
+        $antrian->prefix_antrian =  $poliklinik->prefix_antrian;
+        $antrian->no_antrian =  DB::raw($queryNoAntrian);
+        $antrian->poli =  $request->jadwalDokter->kodepoli;
+        $antrian->jns_pasien =  (($request->jenisPembayaran == 'bpjs') ? 'JKN' : 'NON JKN');
+        $antrian->no_kartu_bpjs =  $request->pasien->noaskes;
+        $antrian->norm =  $request->pasien->norekmed;
+        $antrian->no_referensi =  ($request->jenisKunjungan->kode == 3) ? $request->suratKontrol->noSuratKontrol : $request->rujukan->noKunjungan;
+        $antrian->jns_kunjungan =  $request->jenisKunjungan->kode;
+        $antrian->jam_praktek =  $request->jadwalDokter->jadwal;
+        $antrian->kodedokter_bpjs =  $request->jadwalDokter->kodedokter;
+        $antrian->hp =  (isset($request->rujukan->peserta->mr->noTelepon)) ? $request->rujukan->peserta->mr->noTelepon : '';
+        $antrian->nik =  (isset($request->rujukan->peserta->nik)) ? $request->rujukan->peserta->nik : '';
+        $antrian->sesi =  microtime(true);
+        $antrian->created_at =  date('Y-m-d H:i:s');
+
+        $antrian->save();
+
+        return $antrian;
     }
 
     private function SaveAntrianDetail($request, $dataAntrian) {

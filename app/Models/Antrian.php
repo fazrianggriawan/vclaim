@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class Antrian extends Model
 {
-    protected $table = 'antrian';
-    protected $primaryKey = 'id';
+    protected $table        = 'antrian';
+    protected $primaryKey   = 'id';
     protected $connection   = 'mysql_online';
 
     public function antrian_detail()
