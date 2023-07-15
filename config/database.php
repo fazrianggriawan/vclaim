@@ -11,7 +11,7 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'host' => '101.50.2.213',
-            'database' => 'app_bihealth_online',
+            'database' => 'app_bihealth_online_salak',
             'username' => 'bihealth',
             'password' => 'Xsw21q@z',
             'charset'   => 'utf8',
@@ -21,7 +21,7 @@ return [
         'mysql_emr' => [
             'driver' => 'mysql',
             'host' => '101.50.2.213',
-            'database' => 'app_bihealth_emr',
+            'database' => 'app_bihealth_emr_salak',
             'username' => 'bihealth',
             'password' => 'Xsw21q@z',
             'charset'   => 'utf8',
@@ -31,7 +31,7 @@ return [
         'mysql_online' => [
             'driver' => 'mysql',
             'host' => '101.50.2.213',
-            'database' => 'app_bihealth_online',
+            'database' => 'app_bihealth_online_salak',
             'username' => 'bihealth',
             'password' => 'Xsw21q@z',
             'charset'   => 'utf8',
